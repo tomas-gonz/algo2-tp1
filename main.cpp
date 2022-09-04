@@ -29,6 +29,8 @@ int main(int argc, char **argv) {
     auto *libros = new Libro[10];
     leer_libros(f_libros, libros);
     std::cout << libros->nombre << std::endl;
+    std::cout << libros->puntaje << std::endl;
+    std::cout << libros->genero << std::endl;
     delete []libros;
     std::cout << "Hello, World!" << std::endl;
     return 0;
