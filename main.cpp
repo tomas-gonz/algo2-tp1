@@ -8,7 +8,7 @@ struct Libro {
     int puntaje{};
 };
 
-void leer_libros(std::ifstream &f_libros, Libro *libros) {
+void leer_libros(std::ifstream &f_libros, Libro *libros, int cantidad) {
     Libro libro_aux;
     std::string genero;
     std::string puntaje;
@@ -16,18 +16,26 @@ void leer_libros(std::ifstream &f_libros, Libro *libros) {
     std::getline(f_libros,genero,',');
     std::getline(f_libros,puntaje,'\n');
     libro_aux.genero = genero[0];
-    libro_aux.genero = stoi(puntaje);
+    libro_aux.puntaje = stoi(puntaje);
+    libros[cantidad] = libro_aux;
+    while(f_libros.good()){
 
+    }
 }
 
 int main(int argc, char **argv) {
     std::ifstream f_libros(argv[1]);
     if (!f_libros.is_open()) {
-        perror("in main trying to open file");
+        perror("Main intenta abrir libros.csv");
         return 1;
     }
     auto *libros = new Libro[10];
-    leer_libros(f_libros, libros);
+    int cantidad_libros = 0;
+    leer_libros(f_libros, libros, cantidad_libros);
+    std::cout << libros->nombre << std::endl;
+    std::cout << libros->puntaje << std::endl;
+    std::cout << libros->genero << std::endl;
+    delete []libros;
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
