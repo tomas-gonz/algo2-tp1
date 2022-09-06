@@ -39,5 +39,6 @@ int main(int argc, char **argv) {
     }
     delete[]libros;
     std::cout << "Hello, World!" << std::endl;
+    f_libros.close();
     return 0;
 }
