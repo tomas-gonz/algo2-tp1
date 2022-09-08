@@ -9,8 +9,7 @@ const char CIENCIA_FICCION = 'C';
 const char DIDACTICA = 'D';
 const char POLICIACA = 'P';
 const char ROMANCE = 'R';
-const char TER
-ROR = 'T';
+const char TERROR = 'T';
 const std::string AVENTURA_STR = "Aventura";
 const std::string CIENCIA_FICCION_STR = "Ciencia ficcion";
 const std::string DIDACTICA_STR = "Didactica";
