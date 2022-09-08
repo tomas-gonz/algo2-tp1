@@ -48,25 +48,31 @@ void listar_libros(Libro *libros, int cantidad_libros) {
     }
 }
 
-void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
-    std::string libros_favoritos[cantidad_libros];
+int lista_libros_favoritos(Libro *libros, int cantidad_libros, std::string libros_favoritos[], int &tope) {
     libros_favoritos[0] = libros[0].nombre;
     int puntaje_mayor = libros[0].puntaje;
-    int indice = 0;
+    tope = 0;
     for (int i = 1; i < cantidad_libros; i++) {
         if (libros[i].puntaje > puntaje_mayor) {
-            indice = 0;
-            libros_favoritos[indice] = libros[i].nombre;
+            tope = 0;
+            libros_favoritos[tope] = libros[i].nombre;
             puntaje_mayor = libros[i].puntaje;
         } else if (libros[i].puntaje == puntaje_mayor) {
-            indice++;
-            libros_favoritos[indice] = libros[i].nombre;
+            tope++;
+            libros_favoritos[tope] = libros[i].nombre;
         }
     }
+    return puntaje_mayor;
+}
+
+void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
+    std::string libros_favoritos[cantidad_libros];
+    int tope = 0;
+    int puntaje_mayor = lista_libros_favoritos(libros, cantidad_libros, libros_favoritos, tope);
     int i = 0;
     do {
         std::cout << libros_favoritos[i] << std::endl;
         i++;
-    } while (i < indice);
+    } while (i < tope);
     std::cout << puntaje_mayor << std::endl;
 }
