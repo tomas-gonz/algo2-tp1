@@ -9,7 +9,8 @@ const char CIENCIA_FICCION = 'C';
 const char DIDACTICA = 'D';
 const char POLICIACA = 'P';
 const char ROMANCE = 'R';
-const char TERROR = 'T';
+const char TER
+ROR = 'T';
 const std::string AVENTURA_STR = "Aventura";
 const std::string CIENCIA_FICCION_STR = "Ciencia ficcion";
 const std::string DIDACTICA_STR = "Didactica";
@@ -19,7 +20,7 @@ const std::string TERROR_STR = "Terror";
 
 struct Generos {
     std::string genero;
-    int puntaje;
+    int puntaje{};
 };
 
 std::string genero_palabra(char genero_letra) {
