@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "libros.h"
+#include "menu.h"
 
 
 int main(int argc, char **argv) {
@@ -14,6 +15,8 @@ int main(int argc, char **argv) {
     auto *libros = new Libro[tamanio];
     int cantidad_libros = 0;
     leer_libros(f_libros, libros, cantidad_libros, tamanio);
+    listar_libros(libros, cantidad_libros);
+    mostrar_libro_favorito(libros, cantidad_libros);
     delete[]libros;
     f_libros.close();
     return 0;

@@ -1,7 +1,7 @@
 
 #ifndef MAIN_CPP_LIBROS_H
 #define MAIN_CPP_LIBROS_H
-
+#include <string>
 struct Libro {
     std::string nombre;
     char genero;

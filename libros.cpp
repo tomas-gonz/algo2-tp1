@@ -11,7 +11,6 @@ void aumentar_tamanio_libros(int &tamanio, Libro *&libros) {
     delete[]libros;
     tamanio = tamanio * 2;
     libros = libros_aux;
-    libros_aux = nullptr;
 }
 
 void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &tamanio) {
