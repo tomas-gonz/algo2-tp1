@@ -121,7 +121,7 @@ void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Generos conta
     }
 }
 
-void inicializar_generos(Generos generos[]){
+void inicializar_generos(Generos generos[]) {
     for (int i = 0; i < 6; i++) {
         generos[i].puntaje = 0;
     }
@@ -132,14 +132,17 @@ void inicializar_generos(Generos generos[]){
     generos[4].genero = ROMANCE_STR;
     generos[5].genero = TERROR_STR;
 }
+
 void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     Generos generos[6];
     inicializar_generos(generos);
     for (int i = 0; i < cantidad_libros; i++) {
-        aumentar_contador(generos,libros[i].genero);
+        aumentar_contador(generos, libros[i].genero);
     }
     std::string generos_mas_leidos[6];
     int tope = 0;
     calcular_generos_mas_leidos(generos_mas_leidos, generos, tope);
-
+    for (int i = 0; i < tope; i++) {
+        std::cout << generos_mas_leidos[i] << std::endl;
+    }
 }

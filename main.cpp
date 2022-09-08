@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     leer_libros(f_libros, libros, cantidad_libros, tamanio);
     listar_libros(libros, cantidad_libros);
     mostrar_libro_favorito(libros, cantidad_libros);
+    mostrar_genero_mas_leido(libros, cantidad_libros);
     delete[]libros;
     f_libros.close();
     return 0;
