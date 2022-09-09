@@ -17,9 +17,10 @@ const std::string POLICIACA_STR = "Policiaca";
 const std::string ROMANCE_STR = "Romance";
 const std::string TERROR_STR = "Terror";
 
-struct Generos {
+struct Genero {
     std::string genero;
     int puntaje{};
+    int cantidad_libros;
 };
 
 std::string genero_palabra(char genero_letra) {
@@ -82,7 +83,7 @@ void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
     std::cout << puntaje_mayor << std::endl;
 }
 
-void aumentar_contador(Generos contador_generos[6], char genero) {
+void aumentar_contador(Genero contador_generos[6], char genero) {
 
     switch (genero) {
         case AVENTURA:
@@ -105,7 +106,7 @@ void aumentar_contador(Generos contador_generos[6], char genero) {
     }
 }
 
-void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Generos contador_generos[6], int &tope) {
+void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Genero contador_generos[6], int &tope) {
     tope = 1;
     int mas_leido = contador_generos[0].puntaje;
     for (int i = 0; i < 6; i++) {
@@ -121,7 +122,7 @@ void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Generos conta
     }
 }
 
-void inicializar_generos(Generos generos[]) {
+void inicializar_generos(Genero generos[]) {
     for (int i = 0; i < 6; i++) {
         generos[i].puntaje = 0;
     }
@@ -134,7 +135,7 @@ void inicializar_generos(Generos generos[]) {
 }
 
 void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
-    Generos generos[6];
+    Genero generos[6];
     inicializar_generos(generos);
     for (int i = 0; i < cantidad_libros; i++) {
         aumentar_contador(generos, libros[i].genero);
@@ -145,4 +146,8 @@ void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     for (int i = 0; i < tope; i++) {
         std::cout << generos_mas_leidos[i] << std::endl;
     }
+}
+
+void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
+    Genero generos[6];
 }
