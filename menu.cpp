@@ -19,8 +19,8 @@ const std::string TERROR_STR = "Terror";
 
 struct Genero {
     std::string genero;
-    int puntaje{};
-    int cantidad_libros;
+    int puntaje_total{};
+    int cantidad_libros{};
 };
 
 std::string genero_palabra(char genero_letra) {
@@ -87,35 +87,35 @@ void aumentar_contador(Genero contador_generos[6], char genero) {
 
     switch (genero) {
         case AVENTURA:
-            contador_generos[0].puntaje++;
+            contador_generos[0].cantidad_libros++;
             break;
         case CIENCIA_FICCION:
-            contador_generos[1].puntaje++;
+            contador_generos[1].cantidad_libros++;
             break;
         case DIDACTICA:
-            contador_generos[2].puntaje++;
+            contador_generos[2].cantidad_libros++;
             break;
         case POLICIACA:
-            contador_generos[3].puntaje++;
+            contador_generos[3].cantidad_libros++;
             break;
         case ROMANCE:
-            contador_generos[4].puntaje++;
+            contador_generos[4].cantidad_libros++;
             break;
         default:
-            contador_generos[5].puntaje++;
+            contador_generos[5].cantidad_libros++;
     }
 }
 
 void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Genero contador_generos[6], int &tope) {
     tope = 1;
-    int mas_leido = contador_generos[0].puntaje;
+    int mas_leido = contador_generos[0].cantidad_libros;
     for (int i = 0; i < 6; i++) {
-        if (mas_leido < contador_generos[i].puntaje) {
+        if (mas_leido < contador_generos[i].cantidad_libros) {
             tope = 0;
-            mas_leido = contador_generos[i].puntaje;
+            mas_leido = contador_generos[i].cantidad_libros;
             generos_mas_leidos[tope] = contador_generos[i].genero;
             tope++;
-        } else if (mas_leido == contador_generos[i].puntaje) {
+        } else if (mas_leido == contador_generos[i].cantidad_libros) {
             generos_mas_leidos[tope] = contador_generos[i].genero;
             tope++;
         }
@@ -124,7 +124,8 @@ void calcular_generos_mas_leidos(std::string generos_mas_leidos[], Genero contad
 
 void inicializar_generos(Genero generos[]) {
     for (int i = 0; i < 6; i++) {
-        generos[i].puntaje = 0;
+        generos[i].cantidad_libros = 0;
+        generos[i].puntaje_total = 0;
     }
     generos[0].genero = AVENTURA_STR;
     generos[1].genero = CIENCIA_FICCION_STR;
@@ -150,4 +151,5 @@ void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
 
 void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     Genero generos[6];
+    inicializar_generos(generos);
 }
