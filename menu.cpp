@@ -203,11 +203,11 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     }
 }
 
-bool nuevo_libro_es_menor(Libro libro_viejo, Libro libro_nuevo) {
+bool nuevo_libro_es_menor(const Libro& libro_viejo, const Libro& libro_nuevo) {
     return libro_nuevo.puntaje < libro_viejo.puntaje || libro_nuevo.nombre < libro_viejo.nombre;
 }
 
-void modificar_libros_menos_favoritos(Libro libro, Libro libros_menor_puntaje[], int indice) {
+void modificar_libros_menos_favoritos(const Libro& libro, Libro libros_menor_puntaje[], int indice) {
     if (indice == 2) {
         if (nuevo_libro_es_menor(libros_menor_puntaje[2], libro))
             libros_menor_puntaje[2] = libro;
@@ -244,9 +244,13 @@ void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro
 
 void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros) {
     Libro libros_menor_puntaje[3];
-    int tope = 3;
     obtener_tres_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje);
-    for (int i = 0; i < tope; i++) {
-        std::cout << libros_menor_puntaje[i].nombre << " " << std::endl;
+    for (auto & i : libros_menor_puntaje) {
+        std::cout << i.nombre << " " << std::endl;
     }
+}
+
+
+void agregar_libro(Libro *libros, int cantidad_libros, const Libro& nuevo_libro){
+
 }
