@@ -29,4 +29,5 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
         libros[cantidad] = libro_aux;
         cantidad++;
     } while (f_libros.good());
+    cantidad--;
 }

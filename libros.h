@@ -8,6 +8,8 @@ struct Libro {
     int puntaje;
 };
 
+void aumentar_tamanio_libros(int &tamanio, Libro *&libros);
+
 void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &tamanio);
 
 

@@ -14,4 +14,6 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros);
 
 void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros);
 
+void pedir_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros);
+
 #endif //MAIN_CPP_MENU_H

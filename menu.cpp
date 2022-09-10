@@ -48,7 +48,7 @@ std::string genero_palabra(char genero_letra) {
 }
 
 void listar_libros(Libro *libros, int cantidad_libros) {
-    for (int i = 0; i < cantidad_libros - 1; i++) {
+    for (int i = 0; i < cantidad_libros; i++) {
         std::string genero_str = genero_palabra(libros[i].genero);
         std::cout << libros[i].nombre << "," << libros[i].puntaje << "," << genero_str << std::endl;
     }
@@ -203,11 +203,11 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     }
 }
 
-bool nuevo_libro_es_menor(const Libro& libro_viejo, const Libro& libro_nuevo) {
+bool nuevo_libro_es_menor(const Libro &libro_viejo, const Libro &libro_nuevo) {
     return libro_nuevo.puntaje < libro_viejo.puntaje || libro_nuevo.nombre < libro_viejo.nombre;
 }
 
-void modificar_libros_menos_favoritos(const Libro& libro, Libro libros_menor_puntaje[], int indice) {
+void modificar_libros_menos_favoritos(const Libro &libro, Libro libros_menor_puntaje[], int indice) {
     if (indice == 2) {
         if (nuevo_libro_es_menor(libros_menor_puntaje[2], libro))
             libros_menor_puntaje[2] = libro;
@@ -245,12 +245,44 @@ void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro
 void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros) {
     Libro libros_menor_puntaje[3];
     obtener_tres_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje);
-    for (auto & i : libros_menor_puntaje) {
+    for (auto &i: libros_menor_puntaje) {
         std::cout << i.nombre << " " << std::endl;
     }
 }
 
+bool se_puede_agregar_libro(Libro *libros, int cantidad_libros, const Libro &libro_nuevo) {
+    bool se_puede_agregar = true;
+    int i = 0;
+    while (se_puede_agregar && i < cantidad_libros) {
+        if (libros[i].nombre == libro_nuevo.nombre)
+            se_puede_agregar = false;
+        i++;
+    }
+    return se_puede_agregar;
+}
 
-void agregar_libro(Libro *libros, int cantidad_libros, const Libro& nuevo_libro){
+void pedir_libro(Libro &libro) {
+    std::cout << "Ingrese el nombre del libro" << std::endl;
+    std::cin >> libro.nombre;
+    std::cout << "Ingrese el genero del libro" << std::endl;
+    std::cin >> libro.genero;
+    std::cout << "Ingrese el puntaje del libro" << std::endl;
+    std::cin >> libro.puntaje;
+}
 
+void agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, const Libro &libro_nuevo) {
+    if (tamanio_libros == cantidad_libros)
+        aumentar_tamanio_libros(tamanio_libros, libros);
+    libros[cantidad_libros] = libro_nuevo;
+    cantidad_libros++;
+}
+
+void pedir_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros) {
+    Libro libro_nuevo;
+    pedir_libro(libro_nuevo);
+    if (se_puede_agregar_libro(libros, cantidad_libros, libro_nuevo)) {
+        agregar_libro(libros, tamanio_libros, cantidad_libros, libro_nuevo);
+        std::cout << "Se agrego el libro correctamente" << std::endl;
+    } else
+        std::cout << "Ya existe este libro en la lista" << std::endl;
 }
