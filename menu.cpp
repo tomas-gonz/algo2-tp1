@@ -319,3 +319,7 @@ void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros) {
         libros[indice_libro].puntaje = puntaje_nuevo;
     }
 }
+
+void guardar_y_salir(){
+
+}
