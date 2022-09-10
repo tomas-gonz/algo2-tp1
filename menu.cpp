@@ -203,7 +203,50 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     }
 }
 
+bool nuevo_libro_es_menor(Libro libro_viejo, Libro libro_nuevo) {
+    return libro_nuevo.puntaje < libro_viejo.puntaje || libro_nuevo.nombre < libro_viejo.nombre;
+}
+
+void modificar_libros_favoritos(Libro libro, Libro libros_menor_puntaje[], int indice) {
+    if (indice == 2) {
+        if (nuevo_libro_es_menor(libros_menor_puntaje[2], libro))
+            libros_menor_puntaje[2] = libro;
+    } else if (indice == 1) {
+        if (nuevo_libro_es_menor(libros_menor_puntaje[1], libro)) {
+            libros_menor_puntaje[2] = libros_menor_puntaje[1];
+            libros_menor_puntaje[1] = libro;
+        } else if (libro.nombre < libros_menor_puntaje[1].nombre)
+            libros_menor_puntaje[2] = libro;
+    } else {
+        libros_menor_puntaje[2] = libros_menor_puntaje[1];
+        if (nuevo_libro_es_menor(libros_menor_puntaje[0], libro)) {
+            libros_menor_puntaje[1] = libros_menor_puntaje[0];
+            libros_menor_puntaje[0] = libro;
+        } else if (libro.nombre > libros_menor_puntaje[0].nombre)
+            libros_menor_puntaje[1] = libro;
+    }
+}
+
+
+void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro libros_menor_puntaje[]) {
+    libros_menor_puntaje[0] = libros[0];
+    libros_menor_puntaje[1] = libros[1];
+    libros_menor_puntaje[2] = libros[2];
+    for (int i = 0; i < cantidad_libros; i++) {
+        if (libros[i].puntaje <= libros_menor_puntaje[0].puntaje)
+            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 0);
+        else if (libros[i].puntaje <= libros_menor_puntaje[1].puntaje)
+            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 1);
+        else if (libros[i].puntaje <= libros_menor_puntaje[2].puntaje)
+            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 2);
+    }
+}
 
 void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros) {
-
+    Libro libros_menor_puntaje[3];
+    int tope = 3;
+    obtener_tres_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje);
+    for (int i = 0; i < tope; i++) {
+        std::cout << libros_menor_puntaje[i].nombre << " " << std::endl;
+    }
 }
