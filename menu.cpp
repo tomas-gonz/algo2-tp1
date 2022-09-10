@@ -83,7 +83,7 @@ void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
     std::cout << puntaje_mayor << std::endl;
 }
 
-void aumentar_contador(Genero contador_generos[6], char genero) {
+void aumentar_cantidad(Genero contador_generos[6], char genero) {
 
     switch (genero) {
         case AVENTURA:
@@ -103,6 +103,29 @@ void aumentar_contador(Genero contador_generos[6], char genero) {
             break;
         default:
             contador_generos[5].cantidad_libros++;
+    }
+}
+
+void aumentar_puntaje(Genero contador_generos[6], char genero, int puntaje_obtenido) {
+
+    switch (genero) {
+        case AVENTURA:
+            contador_generos[0].puntaje_total += puntaje_obtenido;
+            break;
+        case CIENCIA_FICCION:
+            contador_generos[1].puntaje_total += puntaje_obtenido;
+            break;
+        case DIDACTICA:
+            contador_generos[2].puntaje_total += puntaje_obtenido;
+            break;
+        case POLICIACA:
+            contador_generos[3].puntaje_total += puntaje_obtenido;
+            break;
+        case ROMANCE:
+            contador_generos[4].puntaje_total += puntaje_obtenido;
+            break;
+        default:
+            contador_generos[5].puntaje_total += puntaje_obtenido;
     }
 }
 
@@ -139,7 +162,7 @@ void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     Genero generos[6];
     inicializar_generos(generos);
     for (int i = 0; i < cantidad_libros; i++) {
-        aumentar_contador(generos, libros[i].genero);
+        aumentar_cantidad(generos, libros[i].genero);
     }
     std::string generos_mas_leidos[6];
     int tope = 0;
@@ -149,7 +172,33 @@ void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     }
 }
 
+void calcular_generos_favoritos(std::string generos_favoritos[], Genero generos[6], int tope) {
+    tope = 1;
+    int mayor_puntaje = generos[0].puntaje_total / generos[0].cantidad_libros;
+    for (int i = 0; i < 6; i++) {
+        if (mayor_puntaje < generos[i].puntaje_total / generos[i].cantidad_libros) {
+            tope = 0;
+            mayor_puntaje = generos[i].puntaje_total / generos[i].cantidad_libros;
+            generos_favoritos[tope] = generos[i].genero;
+            tope++;
+        } else if (mayor_puntaje == generos[i].puntaje_total / generos[i].cantidad_libros) {
+            generos_favoritos[tope] = generos[i].genero;
+            tope++;
+        }
+    }
+}
+
 void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     Genero generos[6];
     inicializar_generos(generos);
+    for (int i = 0; i < cantidad_libros; i++) {
+        aumentar_cantidad(generos, libros[i].genero);
+        aumentar_puntaje(generos, libros[i].genero, libros[i].puntaje);
+    }
+    std::string generos_favoritos[6];
+    int tope = 0;
+    calcular_generos_favoritos(generos_favoritos, generos, tope);
+    for (int i = 0; i < tope; i++) {
+        std::cout << generos_favoritos[i] << std::endl;
+    }
 }
