@@ -207,7 +207,7 @@ bool nuevo_libro_es_menor(Libro libro_viejo, Libro libro_nuevo) {
     return libro_nuevo.puntaje < libro_viejo.puntaje || libro_nuevo.nombre < libro_viejo.nombre;
 }
 
-void modificar_libros_favoritos(Libro libro, Libro libros_menor_puntaje[], int indice) {
+void modificar_libros_menos_favoritos(Libro libro, Libro libros_menor_puntaje[], int indice) {
     if (indice == 2) {
         if (nuevo_libro_es_menor(libros_menor_puntaje[2], libro))
             libros_menor_puntaje[2] = libro;
@@ -234,11 +234,11 @@ void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro
     libros_menor_puntaje[2] = libros[2];
     for (int i = 0; i < cantidad_libros; i++) {
         if (libros[i].puntaje <= libros_menor_puntaje[0].puntaje)
-            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 0);
+            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 0);
         else if (libros[i].puntaje <= libros_menor_puntaje[1].puntaje)
-            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 1);
+            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 1);
         else if (libros[i].puntaje <= libros_menor_puntaje[2].puntaje)
-            modificar_libros_favoritos(libros[i], libros_menor_puntaje, 2);
+            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 2);
     }
 }
 
