@@ -260,12 +260,16 @@ bool se_puede_agregar_libro(Libro *libros, int cantidad_libros, const Libro &lib
     }
     return se_puede_agregar;
 }
-
+bool es_genero_valido(char letra){
+    return letra == AVENTURA || letra == CIENCIA_FICCION|| letra == DIDACTICA || letra == POLICIACA || letra == ROMANCE || letra == TERROR;
+}
 void pedir_libro(Libro &libro) {
     std::cout << "Ingrese el nombre del libro" << std::endl;
     std::cin >> libro.nombre;
-    std::cout << "Ingrese el genero del libro" << std::endl;
-    std::cin >> libro.genero;
+    do{
+        std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales: FALTA" <<std::endl;
+        std::cin >> libro.genero;
+    }while(es_genero_valido(libro.genero));
     std::cout << "Ingrese el puntaje del libro" << std::endl;
     std::cin >> libro.puntaje;
 }

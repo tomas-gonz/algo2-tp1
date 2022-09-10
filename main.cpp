@@ -22,8 +22,6 @@ int main(int argc, char **argv) {
     mostrar_genero_favorito(libros, cantidad_libros);
     mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
     pedir_agregar_libro(libros, tamanio, cantidad_libros);
-    listar_libros(libros, cantidad_libros);
-    std::cout<<cantidad_libros<<std::endl;
     delete[]libros;
     f_libros.close();
     return 0;
