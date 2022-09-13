@@ -268,7 +268,8 @@ bool es_genero_valido(char letra) {
 
 void pedir_libro(Libro &libro) {
     std::cout << "Ingrese el nombre del libro" << std::endl;
-    std::cin >> libro.nombre;
+    //std::cin.ignore();
+    getline(std::cin, libro.nombre);
     do {
         std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales: FALTA" << std::endl;
         std::cin >> libro.genero;
@@ -300,7 +301,8 @@ void pedir_nuevo_puntaje(Libro *libros, int cantidad_libros, int &puntaje_nuevo,
     std::string titulo = " ";
     indice = -1;
     std::cout << "Ingrese el nombre del libro cuyo puntaje quiere modificar" << std::endl;
-    std::cin >> titulo;
+    std::cin.ignore();
+    getline(std::cin, titulo);
     indice = indice_libro_buscado(libros, cantidad_libros, titulo);
     if (indice != -1) {
         do {
@@ -320,6 +322,6 @@ void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros) {
     }
 }
 
-void guardar_y_salir(){
+void guardar_y_salir() {
 
 }
