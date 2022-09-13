@@ -287,11 +287,13 @@ void agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, co
     cantidad_libros++;
 }
 
-void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros) {
+void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, bool &hubo_cambios) {
+    hubo_cambios = false;
     Libro libro_nuevo;
     pedir_libro(libro_nuevo);
     if (indice_libro_buscado(libros, cantidad_libros, libro_nuevo.nombre) == -1) {
         agregar_libro(libros, tamanio_libros, cantidad_libros, libro_nuevo);
+        hubo_cambios = true;
         std::cout << "Se agrego el libro correctamente" << std::endl;
     } else
         std::cout << "Ya existe este libro en la lista" << std::endl;
@@ -313,15 +315,23 @@ void pedir_nuevo_puntaje(Libro *libros, int cantidad_libros, int &puntaje_nuevo,
         std::cout << titulo << " no se encuentra en la lista de libros." << std::endl;
 }
 
-void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros) {
+void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_cambios) {
+    hubo_cambios = false;
     int indice_libro = 0;
     int puntaje_nuevo = 0;
     pedir_nuevo_puntaje(libros, cantidad_libros, puntaje_nuevo, indice_libro);
     if (indice_libro != -1) {
         libros[indice_libro].puntaje = puntaje_nuevo;
+        hubo_cambios = true;
     }
 }
 
-void guardar_y_salir() {
-
+void guardar_y_salir(bool hubo_cambios, std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros,
+                     int &estado_menu) {
+    if (hubo_cambios) {
+        escribir_libros(f_libros_escritura, libros, cantidad_libros);
+        std::cout << "Se han guardado los cambios correctamente. Cerrando el menu.";
+    } else
+        std::cout << "No hubieron cambios realizados. Cerrando el menu.";
+    estado_menu = 0;
 }

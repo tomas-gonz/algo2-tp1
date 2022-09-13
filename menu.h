@@ -15,8 +15,11 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros);
 
 void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros);
 
-void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros);
+void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, bool &hubo_cambios);
 
-void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros);
+void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_cambios);
+
+void guardar_y_salir(bool hubo_cambios, std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros,
+                     int &estado_menu);
 
 #endif //MAIN_CPP_MENU_H
