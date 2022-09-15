@@ -24,7 +24,9 @@ int main(int argc, char **argv) {
     pedir_y_agregar_libro(libros, tamanio, cantidad_libros, se_debe_modificar_archivo);
     pedir_y_editar_puntaje(libros, cantidad_libros, se_debe_modificar_archivo);
     listar_libros(libros, cantidad_libros);
-    delete[]libros;
+    int estado = 0;
     f_libros.close();
+    guardar_y_salir(se_debe_modificar_archivo, argv[1], libros, cantidad_libros, estado);
+    delete[]libros;
     return 0;
 }

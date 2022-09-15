@@ -32,8 +32,9 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
     cantidad--;
 }
 
-void escribir_libros(std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros){
-    for(int i = 0; i < cantidad_libros; i++){
+void escribir_libros(std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros) {
+
+    for (int i = 0; i < cantidad_libros; i++) {
         f_libros_escritura << libros[i].nombre << "," << libros[i].genero << "," << libros[i].puntaje << "\n";
     }
 }

@@ -267,7 +267,7 @@ bool es_genero_valido(char letra) {
 }
 
 void pedir_libro(Libro &libro) {
-    std::cout << "Ingrese el nombre del libro" << std::endl;
+    std::cout << "Ingrese el nombre del libro que quiere agregar a la lista" << std::endl;
     //std::cin.ignore();
     getline(std::cin, libro.nombre);
     do {
@@ -326,12 +326,18 @@ void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_camb
     }
 }
 
-void guardar_y_salir(bool hubo_cambios, std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros,
-                     int &estado_menu) {
+int guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro *libros, int cantidad_libros,
+                    int &estado_menu) {
     if (hubo_cambios) {
+        std::ofstream f_libros_escritura(nombre_archivo);
+        if (!f_libros_escritura.is_open()) {
+            perror("Se intenta abrir libros.csv");
+            return 1;
+        }
         escribir_libros(f_libros_escritura, libros, cantidad_libros);
         std::cout << "Se han guardado los cambios correctamente. Cerrando el menu.";
     } else
         std::cout << "No hubieron cambios realizados. Cerrando el menu.";
     estado_menu = 0;
+    return 0;
 }
