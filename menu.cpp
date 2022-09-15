@@ -268,7 +268,7 @@ bool es_genero_valido(char letra) {
 
 void pedir_libro(Libro &libro) {
     std::cout << "Ingrese el nombre del libro que quiere agregar a la lista" << std::endl;
-    //std::cin.ignore();
+    std::cin.ignore();
     getline(std::cin, libro.nombre);
     do {
         std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales: FALTA" << std::endl;
@@ -344,23 +344,54 @@ void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro
 void imprimir_menu() {
     std::cout << "Bienvenido/a !!" << std::endl;
     std::cout << "---------------MENU---------------" << std::endl;
-    std::cout << "1 -> Listar libros leídos." << std::endl;
+    std::cout << "1 -> Listar libros leidos." << std::endl;
     std::cout << "2 -> Mostrar libro favorito." << std::endl;
-    std::cout << "3 -> Mostrar género más leído." << std::endl;
-    std::cout << "4 -> Mostrar género favorito." << std::endl;
+    std::cout << "3 -> Mostrar genero mas leido." << std::endl;
+    std::cout << "4 -> Mostrar genero favorito." << std::endl;
     std::cout << "5 -> Mostrar los 3 libros con menor puntaje." << std::endl;
-    std::cout << "6 -> Agregar libro ." << std::endl;
-    std::cout << "7 -> Editar puntaje de un libro por título." << std::endl;
+    std::cout << "6 -> Agregar libro." << std::endl;
+    std::cout << "7 -> Editar puntaje de un libro por titulo." << std::endl;
     std::cout << "8 -> Guardar y salir." << std::endl;
 }
 
-int pedir_accion(){
-    int numero = 0;
-    std::cout << "Ingrese un numero, del 1 al 8 para utilizar el menu." << std::endl;
+void pedir_accion(int &numero) {
+    numero = 0;
+    do {
+        std::cout << "Ingrese un numero, del 1 al 8 para utilizar el menu." << std::endl;
+    } while (numero > 1 && numero < 8);
     std::cin >> numero;
-    return numero;
 }
 
-void usar_menu() {
+void
+realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
+                const std::string &nombre_archivo,
+                int &estado_menu) {
 
+    bool hubo_cambios = false;
+    switch (numero) {
+        case 1:
+            listar_libros(libros, cantidad_libros);
+            break;
+        case 2:
+            mostrar_libro_favorito(libros, cantidad_libros);
+            break;
+        case 3:
+            mostrar_genero_mas_leido(libros, cantidad_libros);
+            break;
+        case 4:
+            mostrar_genero_favorito(libros, cantidad_libros);
+            break;
+        case 5:
+            mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
+            break;
+        case 6:
+            pedir_y_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
+            break;
+        case 7:
+            pedir_y_editar_puntaje(libros, cantidad_libros, hubo_cambios);
+            break;
+        case 8:
+            guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
+            break;
+    }
 }
