@@ -19,7 +19,7 @@ void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_li
 
 void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_cambios);
 
-int guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro *libros, int cantidad_libros,
+void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro *libros, int cantidad_libros,
                      int &estado_menu);
 
 #endif //MAIN_CPP_MENU_H
