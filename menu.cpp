@@ -343,16 +343,22 @@ void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro
 
 void imprimir_menu() {
     std::cout << "Bienvenido/a !!" << std::endl;
-    std::cout << "Ingrese un numero, del 1 al 8 para utilizar el menu." << std::endl;
     std::cout << "---------------MENU---------------" << std::endl;
-    std::cout << "1. Listar libros leídos." << std::endl;
-    std::cout << "2. Agregar libro ." << std::endl;
-    std::cout << "3. Editar puntaje de un libro por título." << std::endl;
-    std::cout << "4. Mostrar libro favorito." << std::endl;
-    std::cout << "5. Mostrar los 3 libros con menor puntaje." << std::endl;
-    std::cout << "6. Mostrar género más leído." << std::endl;
-    std::cout << "7. Mostrar género favorito." << std::endl;
-    std::cout << "8. Guardar y salir." << std::endl;
+    std::cout << "1 -> Listar libros leídos." << std::endl;
+    std::cout << "2 -> Mostrar libro favorito." << std::endl;
+    std::cout << "3 -> Mostrar género más leído." << std::endl;
+    std::cout << "4 -> Mostrar género favorito." << std::endl;
+    std::cout << "5 -> Mostrar los 3 libros con menor puntaje." << std::endl;
+    std::cout << "6 -> Agregar libro ." << std::endl;
+    std::cout << "7 -> Editar puntaje de un libro por título." << std::endl;
+    std::cout << "8 -> Guardar y salir." << std::endl;
+}
+
+int pedir_accion(){
+    int numero = 0;
+    std::cout << "Ingrese un numero, del 1 al 8 para utilizar el menu." << std::endl;
+    std::cin >> numero;
+    return numero;
 }
 
 void usar_menu() {
