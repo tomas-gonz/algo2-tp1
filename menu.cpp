@@ -78,15 +78,15 @@ void
 obtener_libros_favoritos(Libro *libros, int cantidad_libros, std::string libros_favoritos[], int &tope,
                          int &mayor_puntaje) {
     libros_favoritos[0] = libros[0].nombre;
-    int puntaje_mayor = libros[0].puntaje;
-    tope = 0;
+    mayor_puntaje = libros[0].puntaje;
+    tope = 1;
     for (int i = 1; i < cantidad_libros; i++) {
-        if (libros[i].puntaje > puntaje_mayor) {
+        if (libros[i].puntaje > mayor_puntaje) {
             tope = 0;
             libros_favoritos[tope] = libros[i].nombre;
-            puntaje_mayor = libros[i].puntaje;
+            mayor_puntaje = libros[i].puntaje;
             tope++;
-        } else if (libros[i].puntaje == puntaje_mayor) {
+        } else if (libros[i].puntaje == mayor_puntaje) {
             libros_favoritos[tope] = libros[i].nombre;
             tope++;
         }
@@ -110,15 +110,13 @@ void obtener_y_mostrar_libros_favoritos(Libro *libros, int cantidad_libros) {
     mostrar_libros_favoritos(libros_favoritos, tope, puntaje_mayor);
 }
 
-void
-inicializar_cantidad_y_puntaje_en_generos(Genero generos[], char genero_buscado, int cantidad, int puntaje_obtenido) {
-
+void aumentar_cantidad_y_puntaje_en_generos(Genero generos[], char genero_buscado, int puntaje_obtenido) {
     int i = 0;
     bool genero_encontrado = false;
     while (i < MAX_GENEROS && !genero_encontrado) {
-        if (generos->genero == genero_buscado) {
+        if (generos[i].genero == genero_buscado) {
             genero_encontrado = true;
-            generos[i].cantidad_libros += cantidad;
+            generos[i].cantidad_libros++;
             generos[i].puntaje_total += puntaje_obtenido;
         }
         i++;
@@ -132,21 +130,22 @@ void inicializar_generos(Genero generos[], Libro *libros, int cantidad_libros) {
         generos[i].genero = GENEROS_INICIALES[i];
     }
     for (int i = 0; i < cantidad_libros; i++) {
-        inicializar_cantidad_y_puntaje_en_generos(generos, libros[i].genero, 1, libros[i].puntaje);
+        aumentar_cantidad_y_puntaje_en_generos(generos, libros[i].genero, libros[i].puntaje);
     }
 }
 
-void obtener_generos_mas_leidos(std::string generos_mas_leidos[], Genero contador_generos[], int &tope) {
+void obtener_generos_mas_leidos(std::string generos_mas_leidos[], Genero generos[], int &tope) {
     tope = 1;
-    int mas_leido = contador_generos[0].cantidad_libros;
-    for (int i = 0; i < MAX_GENEROS; i++) {
-        if (mas_leido < contador_generos[i].cantidad_libros) {
+    int mas_leido = generos[0].cantidad_libros;
+    generos_mas_leidos[0] = genero_palabra(generos[0].genero);
+    for (int i = 1; i < MAX_GENEROS; i++) {
+        if (mas_leido < generos[i].cantidad_libros) {
             tope = 0;
-            mas_leido = contador_generos[i].cantidad_libros;
-            generos_mas_leidos[tope] = contador_generos[i].genero;
+            mas_leido = generos[i].cantidad_libros;
+            generos_mas_leidos[tope] = genero_palabra(generos[i].genero);
             tope++;
-        } else if (mas_leido == contador_generos[i].cantidad_libros) {
-            generos_mas_leidos[tope] = contador_generos[i].genero;
+        } else if (mas_leido == generos[i].cantidad_libros) {
+            generos_mas_leidos[tope] = genero_palabra(generos[i].genero);
             tope++;
         }
     }
@@ -183,12 +182,14 @@ void obtener_generos_favoritos(std::string generos_favoritos[], Genero generos[]
         }
     }
 }
-void mostrar_generos_favoritos( std::string generos_favoritos[], int tope){
+
+void mostrar_generos_favoritos(std::string generos_favoritos[], int tope) {
     std::cout << "Los generos favoritos son:";
     for (int i = 0; i < tope; i++) {
         std::cout << generos_favoritos[i] << std::endl;
     }
 }
+
 void obtener_y_mostrar_generos_favoritos(Libro *libros, int cantidad_libros) {
     Genero generos[MAX_GENEROS];
     std::string generos_favoritos[MAX_GENEROS];
@@ -346,9 +347,9 @@ void imprimir_menu() {
     std::cout << "Bienvenido/a !!" << std::endl;
     std::cout << "_--------------------MENU--------------------_" << std::endl;
     std::cout << "1 -> Listar libros leidos." << std::endl;
-    std::cout << "2 -> Mostrar libro favorito." << std::endl;
-    std::cout << "3 -> Mostrar genero mas leido." << std::endl;
-    std::cout << "4 -> Mostrar genero favorito." << std::endl;
+    std::cout << "2 -> Mostrar libros favoritos." << std::endl;
+    std::cout << "3 -> Mostrar generos mas leidos." << std::endl;
+    std::cout << "4 -> Mostrar generos favoritos." << std::endl;
     std::cout << "5 -> Mostrar los 3 libros con menor puntaje." << std::endl;
     std::cout << "6 -> Agregar libro." << std::endl;
     std::cout << "7 -> Editar puntaje de un libro por titulo." << std::endl;
