@@ -169,22 +169,22 @@ void obtener_y_mostrar_generos_mas_leidos(Libro *libros, int cantidad_libros) {
 
 void obtener_generos_favoritos(std::string generos_favoritos[], Genero generos[], int &tope) {
     tope = 1;
-    int mayor_puntaje = generos[0].puntaje_total / generos[0].cantidad_libros;
-    for (int i = 0; i < MAX_GENEROS; i++) {
-        if (mayor_puntaje < generos[i].puntaje_total / generos[i].cantidad_libros) {
+    int mayor_promedio = generos[0].puntaje_total / generos[0].cantidad_libros;
+    for (int i = 1; i < MAX_GENEROS; i++) {
+        if (mayor_promedio < generos[i].puntaje_total / generos[i].cantidad_libros) {
             tope = 0;
-            mayor_puntaje = generos[i].puntaje_total / generos[i].cantidad_libros;
-            generos_favoritos[tope] = generos[i].genero;
+            mayor_promedio = generos[i].puntaje_total / generos[i].cantidad_libros;
+            generos_favoritos[tope] = genero_palabra(generos[i].genero);
             tope++;
-        } else if (mayor_puntaje == generos[i].puntaje_total / generos[i].cantidad_libros) {
-            generos_favoritos[tope] = generos[i].genero;
+        } else if (mayor_promedio == generos[i].puntaje_total / generos[i].cantidad_libros) {
+            generos_favoritos[tope] = genero_palabra(generos[i].genero);
             tope++;
         }
     }
 }
 
 void mostrar_generos_favoritos(std::string generos_favoritos[], int tope) {
-    std::cout << "Los generos favoritos son:";
+    std::cout << "Los generos favoritos son:" << std::endl;
     for (int i = 0; i < tope; i++) {
         std::cout << generos_favoritos[i] << std::endl;
     }
