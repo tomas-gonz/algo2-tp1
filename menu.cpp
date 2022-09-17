@@ -379,5 +379,7 @@ realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_l
         case GUARDAR_Y_SALIR:
             guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
             break;
+        default:
+            std::cout <<"Error.";
     }
 }
