@@ -16,6 +16,7 @@ const int NO_ENCONTRADO = -1;
 const int MAX_PUNTAJE = 100;
 const int MIN_PUNTAJE = 0;
 
+const int MAX_ACCIONES = 8;
 const int LISTAR_LIBROS = 1;
 const int MOSTRAR_LIBRO_FAVORITO = 2;
 const int MOSTRAR_GENERO_MAS_LEIDO = 3;
@@ -213,7 +214,6 @@ void modificar_libros_menos_favoritos(const Libro &libro, Libro libros_menor_pun
     }
 }
 
-
 void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro libros_menor_puntaje[]) {
     libros_menor_puntaje[0] = libros[0];
     libros_menor_puntaje[1] = libros[1];
@@ -258,7 +258,13 @@ void pedir_libro(Libro &libro) {
     std::cin.ignore();
     getline(std::cin, libro.nombre);
     do {
-        std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales: FALTA" << std::endl;
+        std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales:" << std::endl;
+        std::cout << AVENTURA_INICIAL << " -->> " << GENEROS[0] << std::endl;
+        std::cout << CIENCIA_FICCION_INICIAL << " -->> " << GENEROS[1] << std::endl;
+        std::cout << DIDACTICA_INICIAL << " -->> " << GENEROS[2] << std::endl;
+        std::cout << POLICIACA_INICIAL << " -->> " << GENEROS[3] << std::endl;
+        std::cout << ROMANCE_INICIAL << " -->> " << GENEROS[4] << std::endl;
+        std::cout << TERROR_INICIAL << " -->> " << GENEROS[5] << std::endl;
         std::cin >> libro.genero;
     } while (!es_genero_valido(libro.genero));
     do {
@@ -341,12 +347,18 @@ void imprimir_menu() {
     std::cout << "8 -> Guardar y salir." << std::endl;
 }
 
-void pedir_accion(int &numero) {
-    numero = 0;
+void pedir_accion(char &accion) {
+
     do {
-        std::cout << "Ingrese un numero, del 1 al 8 para utilizar el menu." << std::endl;
-    } while (numero > 1 && numero < 8);
-    std::cin >> numero;
+        std::cout << "Ingrese un numero, del 1 al " << MAX_ACCIONES << " para utilizar el menu." << std::endl;
+        std::cin >> accion;
+    } while (accion > 1 && accion < MAX_ACCIONES);
+}
+
+void volver_al_menu() {
+    char aux;
+    std::cout << "Ingrese cualquier character para volver al menu" << std::endl;
+    std::cin >> aux;
 }
 
 void
@@ -357,29 +369,38 @@ realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_l
     switch (numero) {
         case LISTAR_LIBROS:
             listar_libros(libros, cantidad_libros);
+            volver_al_menu();
             break;
         case MOSTRAR_LIBRO_FAVORITO:
             mostrar_libro_favorito(libros, cantidad_libros);
+            volver_al_menu();
             break;
         case MOSTRAR_GENERO_MAS_LEIDO:
             mostrar_genero_mas_leido(libros, cantidad_libros);
+            volver_al_menu();
             break;
         case MOSTRAR_GENERO_FAVORITO:
             mostrar_genero_favorito(libros, cantidad_libros);
+            volver_al_menu();
             break;
         case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
             mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
+            volver_al_menu();
             break;
         case PEDIR_Y_AGREGAR_LIBRO:
             pedir_y_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
+            volver_al_menu();
             break;
         case PEDIR_Y_EDITAR_PUNTAJE:
             pedir_y_editar_puntaje(libros, cantidad_libros, hubo_cambios);
+            volver_al_menu();
             break;
         case GUARDAR_Y_SALIR:
             guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
             break;
         default:
-            std::cout <<"Error.";
+            std::cout << "Error, el character ingresado no se encuentra en el rango de numeros entre 1 y 8"
+                      << std::endl;
+            volver_al_menu();
     }
 }

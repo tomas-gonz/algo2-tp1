@@ -7,7 +7,7 @@
 
 void imprimir_menu();
 
-void pedir_accion(int &numero);
+void pedir_accion(char &accion);
 
 void
 realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
