@@ -17,14 +17,14 @@ const int MAX_PUNTAJE = 100;
 const int MIN_PUNTAJE = 0;
 
 const int MAX_ACCIONES = 8;
-const int LISTAR_LIBROS = 1;
-const int MOSTRAR_LIBRO_FAVORITO = 2;
-const int MOSTRAR_GENERO_MAS_LEIDO = 3;
-const int MOSTRAR_GENERO_FAVORITO = 4;
-const int MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = 5;
-const int PEDIR_Y_AGREGAR_LIBRO = 6;
-const int PEDIR_Y_EDITAR_PUNTAJE = 7;
-const int GUARDAR_Y_SALIR = 8;
+const char LISTAR_LIBROS = '1';
+const char MOSTRAR_LIBRO_FAVORITO = '2';
+const int MOSTRAR_GENERO_MAS_LEIDO = '3';
+const int MOSTRAR_GENERO_FAVORITO = '4';
+const int MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = '5';
+const int PEDIR_Y_AGREGAR_LIBRO = '6';
+const int PEDIR_Y_EDITAR_PUNTAJE = '7';
+const int GUARDAR_Y_SALIR = '8';
 
 
 struct Genero {
@@ -58,10 +58,15 @@ std::string genero_palabra(char genero_letra) {
 }
 
 void listar_libros(Libro *libros, int cantidad_libros) {
+    std::cout << "Listando los libros:" << std::endl;
     for (int i = 0; i < cantidad_libros; i++) {
+
         std::string genero_str = genero_palabra(libros[i].genero);
-        std::cout << libros[i].nombre << "," << libros[i].puntaje << "," << genero_str << std::endl;
+        std::cout << i + 1 << ") " << libros[i].nombre << " ," << libros[i].puntaje << " puntos";
+        std::cout << ", de genero " << genero_str << std::endl;
     }
+
+
 }
 
 int lista_libros_favoritos(Libro *libros, int cantidad_libros, std::string libros_favoritos[], int &tope) {
@@ -80,17 +85,22 @@ int lista_libros_favoritos(Libro *libros, int cantidad_libros, std::string libro
     }
     return puntaje_mayor;
 }
+void mostrar_libros_favoritos(std::string libros_favoritos[], int tope, int puntaje_mayor){
 
-void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
-    std::string libros_favoritos[cantidad_libros];
-    int tope = 0;
-    int puntaje_mayor = lista_libros_favoritos(libros, cantidad_libros, libros_favoritos, tope);
+    std::cout << "Listando libros favoritos, de mayor puntaje:" << std::endl;
     int i = 0;
     do {
         std::cout << libros_favoritos[i] << std::endl;
         i++;
     } while (i < tope);
-    std::cout << puntaje_mayor << std::endl;
+    std::cout << "El puntaje mayor es " << puntaje_mayor << std::endl;
+}
+
+void obtener_y_mostrar_libros_favoritos(Libro *libros, int cantidad_libros) {
+    std::string libros_favoritos[cantidad_libros];
+    int tope = 0;
+    int puntaje_mayor = lista_libros_favoritos(libros, cantidad_libros, libros_favoritos, tope);
+    mostrar_libros_favoritos(libros_favoritos, tope, puntaje_mayor);
 }
 
 void aumentar_cantidad_y_puntaje(Genero contador_generos[6], char genero, int cantidad, int puntaje_obtenido) {
@@ -258,13 +268,13 @@ void pedir_libro(Libro &libro) {
     std::cin.ignore();
     getline(std::cin, libro.nombre);
     do {
-        std::cout << "Ingrese el genero del libro, debe ser una de las siguientes inciales:" << std::endl;
-        std::cout << AVENTURA_INICIAL << " -->> " << GENEROS[0] << std::endl;
-        std::cout << CIENCIA_FICCION_INICIAL << " -->> " << GENEROS[1] << std::endl;
-        std::cout << DIDACTICA_INICIAL << " -->> " << GENEROS[2] << std::endl;
-        std::cout << POLICIACA_INICIAL << " -->> " << GENEROS[3] << std::endl;
-        std::cout << ROMANCE_INICIAL << " -->> " << GENEROS[4] << std::endl;
-        std::cout << TERROR_INICIAL << " -->> " << GENEROS[5] << std::endl;
+        std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
+        std::cout << AVENTURA_INICIAL << " -> " << GENEROS[0] << std::endl;
+        std::cout << CIENCIA_FICCION_INICIAL << " -> " << GENEROS[1] << std::endl;
+        std::cout << DIDACTICA_INICIAL << " -> " << GENEROS[2] << std::endl;
+        std::cout << POLICIACA_INICIAL << " -> " << GENEROS[3] << std::endl;
+        std::cout << ROMANCE_INICIAL << " -> " << GENEROS[4] << std::endl;
+        std::cout << TERROR_INICIAL << " -> " << GENEROS[5] << std::endl;
         std::cin >> libro.genero;
     } while (!es_genero_valido(libro.genero));
     do {
@@ -336,7 +346,7 @@ void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro
 
 void imprimir_menu() {
     std::cout << "Bienvenido/a !!" << std::endl;
-    std::cout << "---------------MENU---------------" << std::endl;
+    std::cout << "_--------------------MENU--------------------_" << std::endl;
     std::cout << "1 -> Listar libros leidos." << std::endl;
     std::cout << "2 -> Mostrar libro favorito." << std::endl;
     std::cout << "3 -> Mostrar genero mas leido." << std::endl;
@@ -349,10 +359,11 @@ void imprimir_menu() {
 
 void pedir_accion(char &accion) {
 
+    accion = 0;
     do {
         std::cout << "Ingrese un numero, del 1 al " << MAX_ACCIONES << " para utilizar el menu." << std::endl;
         std::cin >> accion;
-    } while (accion > 1 && accion < MAX_ACCIONES);
+    } while (accion < '1' || accion > '8');
 }
 
 void volver_al_menu() {
@@ -362,17 +373,17 @@ void volver_al_menu() {
 }
 
 void
-realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
+realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
                 int &estado_menu, bool &hubo_cambios) {
 
-    switch (numero) {
+    switch (accion) {
         case LISTAR_LIBROS:
             listar_libros(libros, cantidad_libros);
             volver_al_menu();
             break;
         case MOSTRAR_LIBRO_FAVORITO:
-            mostrar_libro_favorito(libros, cantidad_libros);
+            obtener_y_mostrar_libros_favoritos(libros, cantidad_libros);
             volver_al_menu();
             break;
         case MOSTRAR_GENERO_MAS_LEIDO:
