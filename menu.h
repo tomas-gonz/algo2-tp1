@@ -12,6 +12,6 @@ void pedir_accion(int &numero);
 void
 realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
-                int &estado_menu);
+                int &estado_menu, bool &hubo_cambios);
 
 #endif //MAIN_CPP_MENU_H

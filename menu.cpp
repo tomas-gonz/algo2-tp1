@@ -4,18 +4,27 @@
 #include <fstream>
 #include <string>
 
-const char AVENTURA = 'A';
-const char CIENCIA_FICCION = 'C';
-const char DIDACTICA = 'D';
-const char POLICIACA = 'P';
-const char ROMANCE = 'R';
-const char TERROR = 'T';
-const std::string AVENTURA_STR = "Aventura";
-const std::string CIENCIA_FICCION_STR = "Ciencia ficcion";
-const std::string DIDACTICA_STR = "Didactica";
-const std::string POLICIACA_STR = "Policiaca";
-const std::string ROMANCE_STR = "Romance";
-const std::string TERROR_STR = "Terror";
+const char AVENTURA_INICIAL = 'A';
+const char CIENCIA_FICCION_INICIAL = 'C';
+const char DIDACTICA_INICIAL = 'D';
+const char POLICIACA_INICIAL = 'P';
+const char ROMANCE_INICIAL = 'R';
+const char TERROR_INICIAL = 'T';
+const std::string GENEROS[] = {"Aventura", "Ciencia ficcion", "Didactica", "Policiaca", "Romance", "Terror"};
+
+const int NO_ENCONTRADO = -1;
+const int MAX_PUNTAJE = 100;
+const int MIN_PUNTAJE = 0;
+
+const int LISTAR_LIBROS = 1;
+const int MOSTRAR_LIBRO_FAVORITO = 2;
+const int MOSTRAR_GENERO_MAS_LEIDO = 3;
+const int MOSTRAR_GENERO_FAVORITO = 4;
+const int MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = 5;
+const int PEDIR_Y_AGREGAR_LIBRO = 6;
+const int PEDIR_Y_EDITAR_PUNTAJE = 7;
+const int GUARDAR_Y_SALIR = 8;
+
 
 struct Genero {
     std::string genero;
@@ -26,23 +35,23 @@ struct Genero {
 std::string genero_palabra(char genero_letra) {
     std::string genero_palabra;
     switch (genero_letra) {
-        case AVENTURA:
-            genero_palabra = AVENTURA_STR;
+        case AVENTURA_INICIAL:
+            genero_palabra = GENEROS[0];
             break;
-        case CIENCIA_FICCION:
-            genero_palabra = CIENCIA_FICCION_STR;
+        case CIENCIA_FICCION_INICIAL:
+            genero_palabra = GENEROS[1];
             break;
-        case DIDACTICA:
-            genero_palabra = DIDACTICA_STR;
+        case DIDACTICA_INICIAL:
+            genero_palabra = GENEROS[2];
             break;
-        case POLICIACA:
-            genero_palabra = POLICIACA_STR;
+        case POLICIACA_INICIAL:
+            genero_palabra = GENEROS[3];
             break;
-        case ROMANCE:
-            genero_palabra = ROMANCE_STR;
+        case ROMANCE_INICIAL:
+            genero_palabra = GENEROS[4];
             break;
         default:
-            genero_palabra = TERROR_STR;
+            genero_palabra = GENEROS[5];
     }
     return genero_palabra;
 }
@@ -83,48 +92,31 @@ void mostrar_libro_favorito(Libro *libros, int cantidad_libros) {
     std::cout << puntaje_mayor << std::endl;
 }
 
-void aumentar_cantidad(Genero contador_generos[6], char genero) {
+void aumentar_cantidad_y_puntaje(Genero contador_generos[6], char genero, int cantidad, int puntaje_obtenido) {
 
     switch (genero) {
-        case AVENTURA:
-            contador_generos[0].cantidad_libros++;
-            break;
-        case CIENCIA_FICCION:
-            contador_generos[1].cantidad_libros++;
-            break;
-        case DIDACTICA:
-            contador_generos[2].cantidad_libros++;
-            break;
-        case POLICIACA:
-            contador_generos[3].cantidad_libros++;
-            break;
-        case ROMANCE:
-            contador_generos[4].cantidad_libros++;
-            break;
-        default:
-            contador_generos[5].cantidad_libros++;
-    }
-}
-
-void aumentar_puntaje(Genero contador_generos[6], char genero, int puntaje_obtenido) {
-
-    switch (genero) {
-        case AVENTURA:
+        case AVENTURA_INICIAL:
+            contador_generos[0].cantidad_libros += cantidad;
             contador_generos[0].puntaje_total += puntaje_obtenido;
             break;
-        case CIENCIA_FICCION:
+        case CIENCIA_FICCION_INICIAL:
+            contador_generos[1].cantidad_libros += cantidad;
             contador_generos[1].puntaje_total += puntaje_obtenido;
             break;
-        case DIDACTICA:
+        case DIDACTICA_INICIAL:
+            contador_generos[2].cantidad_libros += cantidad;
             contador_generos[2].puntaje_total += puntaje_obtenido;
             break;
-        case POLICIACA:
+        case POLICIACA_INICIAL:
+            contador_generos[3].cantidad_libros += cantidad;
             contador_generos[3].puntaje_total += puntaje_obtenido;
             break;
-        case ROMANCE:
+        case ROMANCE_INICIAL:
+            contador_generos[4].cantidad_libros += cantidad;
             contador_generos[4].puntaje_total += puntaje_obtenido;
             break;
         default:
+            contador_generos[5].cantidad_libros += cantidad;
             contador_generos[5].puntaje_total += puntaje_obtenido;
     }
 }
@@ -149,20 +141,15 @@ void inicializar_generos(Genero generos[]) {
     for (int i = 0; i < 6; i++) {
         generos[i].cantidad_libros = 0;
         generos[i].puntaje_total = 0;
+        generos[i].genero = GENEROS[i];
     }
-    generos[0].genero = AVENTURA_STR;
-    generos[1].genero = CIENCIA_FICCION_STR;
-    generos[2].genero = DIDACTICA_STR;
-    generos[3].genero = POLICIACA_STR;
-    generos[4].genero = ROMANCE_STR;
-    generos[5].genero = TERROR_STR;
 }
 
 void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     Genero generos[6];
     inicializar_generos(generos);
     for (int i = 0; i < cantidad_libros; i++) {
-        aumentar_cantidad(generos, libros[i].genero);
+        aumentar_cantidad_y_puntaje(generos, libros[i].genero, 1, 0);
     }
     std::string generos_mas_leidos[6];
     int tope = 0;
@@ -172,7 +159,7 @@ void mostrar_genero_mas_leido(Libro *libros, int cantidad_libros) {
     }
 }
 
-void calcular_generos_favoritos(std::string generos_favoritos[], Genero generos[6], int &tope) {
+void calcular_generos_favoritos(std::string generos_favoritos[], Genero generos[], int &tope) {
     tope = 1;
     int mayor_puntaje = generos[0].puntaje_total / generos[0].cantidad_libros;
     for (int i = 0; i < 6; i++) {
@@ -192,8 +179,7 @@ void mostrar_genero_favorito(Libro *libros, int cantidad_libros) {
     Genero generos[6];
     inicializar_generos(generos);
     for (int i = 0; i < cantidad_libros; i++) {
-        aumentar_cantidad(generos, libros[i].genero);
-        aumentar_puntaje(generos, libros[i].genero, libros[i].puntaje);
+        aumentar_cantidad_y_puntaje(generos, libros[i].genero, 1, libros[i].puntaje);
     }
     std::string generos_favoritos[6];
     int tope = 0;
@@ -251,9 +237,9 @@ void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros) {
 }
 
 int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &titulo_buscado) {
-    int indice = -1;
+    int indice = NO_ENCONTRADO;
     int i = 0;
-    while (indice == -1 && i < cantidad_libros) {
+    while (indice == NO_ENCONTRADO && i < cantidad_libros) {
         if (libros[i].nombre == titulo_buscado)
             indice = i;
         i++;
@@ -262,8 +248,9 @@ int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &
 }
 
 bool es_genero_valido(char letra) {
-    return letra == AVENTURA || letra == CIENCIA_FICCION || letra == DIDACTICA || letra == POLICIACA ||
-           letra == ROMANCE || letra == TERROR;
+    return letra == AVENTURA_INICIAL || letra == CIENCIA_FICCION_INICIAL || letra == DIDACTICA_INICIAL ||
+           letra == POLICIACA_INICIAL ||
+           letra == ROMANCE_INICIAL || letra == TERROR_INICIAL;
 }
 
 void pedir_libro(Libro &libro) {
@@ -275,9 +262,9 @@ void pedir_libro(Libro &libro) {
         std::cin >> libro.genero;
     } while (!es_genero_valido(libro.genero));
     do {
-        std::cout << "Ingrese el puntaje del libro entre 0 y 100" << std::endl;
+        std::cout << "Ingrese el puntaje del libro entre " << MIN_PUNTAJE << " y " << MAX_PUNTAJE << std::endl;
         std::cin >> libro.puntaje;
-    } while (libro.puntaje > 100 || libro.puntaje < 0);
+    } while (libro.puntaje > MAX_PUNTAJE || libro.puntaje < MIN_PUNTAJE);
 }
 
 void agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, const Libro &libro_nuevo) {
@@ -365,32 +352,31 @@ void pedir_accion(int &numero) {
 void
 realizar_accion(int numero, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
-                int &estado_menu) {
+                int &estado_menu, bool &hubo_cambios) {
 
-    bool hubo_cambios = false;
     switch (numero) {
-        case 1:
+        case LISTAR_LIBROS:
             listar_libros(libros, cantidad_libros);
             break;
-        case 2:
+        case MOSTRAR_LIBRO_FAVORITO:
             mostrar_libro_favorito(libros, cantidad_libros);
             break;
-        case 3:
+        case MOSTRAR_GENERO_MAS_LEIDO:
             mostrar_genero_mas_leido(libros, cantidad_libros);
             break;
-        case 4:
+        case MOSTRAR_GENERO_FAVORITO:
             mostrar_genero_favorito(libros, cantidad_libros);
             break;
-        case 5:
+        case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
             mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
             break;
-        case 6:
+        case PEDIR_Y_AGREGAR_LIBRO:
             pedir_y_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
             break;
-        case 7:
+        case PEDIR_Y_EDITAR_PUNTAJE:
             pedir_y_editar_puntaje(libros, cantidad_libros, hubo_cambios);
             break;
-        case 8:
+        case GUARDAR_Y_SALIR:
             guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
             break;
     }
