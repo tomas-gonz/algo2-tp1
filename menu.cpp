@@ -237,12 +237,16 @@ void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro
     }
 }
 
-void mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros) {
+void mostrar_tres_libros_menor_puntaje(Libro libros_menor_puntaje[], int tope) {
+    std::cout << "Los tres libros con menor puntaje son:" << std::endl;
+    for (int i = 0; i < tope; i++){
+        std::cout << libros_menor_puntaje[i].nombre << std::endl;
+    }
+}
+void obtener_y_mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros){
     Libro libros_menor_puntaje[3];
     obtener_tres_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje);
-    for (auto &i: libros_menor_puntaje) {
-        std::cout << i.nombre << " " << std::endl;
-    }
+    mostrar_tres_libros_menor_puntaje(libros_menor_puntaje, 3);
 }
 
 int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &titulo_buscado) {
@@ -257,9 +261,13 @@ int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &
 }
 
 bool es_genero_valido(char letra) {
-    return letra == AVENTURA_INICIAL || letra == CIENCIA_FICCION_INICIAL || letra == DIDACTICA_INICIAL ||
-           letra == POLICIACA_INICIAL ||
-           letra == ROMANCE_INICIAL || letra == TERROR_INICIAL;
+    int i = 0;
+    bool es_genero_valido = false;
+    while(i < MAX_GENEROS && !es_genero_valido){
+        if(letra == GENEROS_INICIALES[i])
+            es_genero_valido = true;
+    }
+    return es_genero_valido;
 }
 
 void pedir_libro(Libro &libro) {
@@ -268,12 +276,9 @@ void pedir_libro(Libro &libro) {
     getline(std::cin, libro.nombre);
     do {
         std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
-        std::cout << AVENTURA_INICIAL << " -> " << GENEROS[0] << std::endl;
-        std::cout << CIENCIA_FICCION_INICIAL << " -> " << GENEROS[1] << std::endl;
-        std::cout << DIDACTICA_INICIAL << " -> " << GENEROS[2] << std::endl;
-        std::cout << POLICIACA_INICIAL << " -> " << GENEROS[3] << std::endl;
-        std::cout << ROMANCE_INICIAL << " -> " << GENEROS[4] << std::endl;
-        std::cout << TERROR_INICIAL << " -> " << GENEROS[5] << std::endl;
+        for(char i : GENEROS_INICIALES){
+            std::cout << i << " -> " << GENEROS[i] << std::endl;
+        }
         std::cin >> libro.genero;
     } while (!es_genero_valido(libro.genero));
     do {
@@ -394,7 +399,7 @@ realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_
             volver_al_menu();
             break;
         case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
-            mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
+            obtener_y_mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
             volver_al_menu();
             break;
         case PEDIR_Y_AGREGAR_LIBRO:
