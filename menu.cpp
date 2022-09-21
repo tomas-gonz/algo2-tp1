@@ -266,6 +266,7 @@ bool es_genero_valido(char letra) {
     while(i < MAX_GENEROS && !es_genero_valido){
         if(letra == GENEROS_INICIALES[i])
             es_genero_valido = true;
+        i++;
     }
     return es_genero_valido;
 }
@@ -276,8 +277,8 @@ void pedir_libro(Libro &libro) {
     getline(std::cin, libro.nombre);
     do {
         std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
-        for(char i : GENEROS_INICIALES){
-            std::cout << i << " -> " << GENEROS[i] << std::endl;
+        for(int i = 0; i < MAX_GENEROS; i++){
+            std::cout << GENEROS_INICIALES[i] << " -> " << GENEROS[i] << std::endl;
         }
         std::cin >> libro.genero;
     } while (!es_genero_valido(libro.genero));
