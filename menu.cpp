@@ -4,13 +4,14 @@
 #include <fstream>
 #include <string>
 
-const char AVENTURA_INICIAL = 'A';
-const char CIENCIA_FICCION_INICIAL = 'C';
-const char DIDACTICA_INICIAL = 'D';
-const char POLICIACA_INICIAL = 'P';
-const char ROMANCE_INICIAL = 'R';
-const char TERROR_INICIAL = 'T';
-
+/*
+* AVENTURA_INICIAL = 'A';
+* CIENCIA_FICCION_INICIAL = 'C';
+* DIDACTICA_INICIAL = 'D';
+* POLICIACA_INICIAL = 'P';
+* ROMANCE_INICIAL = 'R';
+* TERROR_INICIAL = 'T';
+*/
 const int MAX_GENEROS = 6;
 const char GENEROS_INICIALES[] = {'A', 'C', 'D', 'P', 'R', 'T'};
 const std::string GENEROS[] = {"Aventura", "Ciencia ficcion", "Didactica", "Policiaca", "Romance", "Terror"};
@@ -36,42 +37,31 @@ struct Genero {
     int cantidad_libros{};
 };
 
-std::string genero_palabra(char genero_letra) {
-    std::string genero_palabra;
-    switch (genero_letra) {
-        case AVENTURA_INICIAL:
-            genero_palabra = GENEROS[0];
-            break;
-        case CIENCIA_FICCION_INICIAL:
-            genero_palabra = GENEROS[1];
-            break;
-        case DIDACTICA_INICIAL:
-            genero_palabra = GENEROS[2];
-            break;
-        case POLICIACA_INICIAL:
-            genero_palabra = GENEROS[3];
-            break;
-        case ROMANCE_INICIAL:
-            genero_palabra = GENEROS[4];
-            break;
-        case TERROR_INICIAL:
-            genero_palabra = GENEROS[5];
-        default:
-            std::cout << "Error, genero no encontrado";
+int indice_genero_buscado(char letra) {
+    int i = 0;
+    int indice_genero_buscado = NO_ENCONTRADO;
+    while (i < MAX_GENEROS && indice_genero_buscado == NO_ENCONTRADO) {
+        if (letra == GENEROS_INICIALES[i])
+            indice_genero_buscado = i;
+        i++;
     }
-    return genero_palabra;
+    return indice_genero_buscado;
+}
+
+std::string genero_palabra(char genero_letra) {
+    int indice = indice_genero_buscado(genero_letra);
+    if (indice != NO_ENCONTRADO)
+        return GENEROS[indice];
+    return "Error, inicial no reconocida como genero posible";
 }
 
 void listar_libros(Libro *libros, int cantidad_libros) {
     std::cout << "Listando los libros:" << std::endl;
     for (int i = 0; i < cantidad_libros; i++) {
-
         std::string genero_str = genero_palabra(libros[i].genero);
         std::cout << i + 1 << ") " << libros[i].nombre << " ," << libros[i].puntaje << " puntos";
         std::cout << ", de genero " << genero_str << std::endl;
     }
-
-
 }
 
 void
@@ -200,53 +190,69 @@ void obtener_y_mostrar_generos_favoritos(Libro *libros, int cantidad_libros) {
 }
 
 bool nuevo_libro_es_menor(const Libro &libro_viejo, const Libro &libro_nuevo) {
-    return libro_nuevo.puntaje < libro_viejo.puntaje || libro_nuevo.nombre < libro_viejo.nombre;
+    return libro_nuevo.puntaje < libro_viejo.puntaje ||
+           libro_nuevo.nombre < libro_viejo.nombre && libro_nuevo.puntaje == libro_viejo.puntaje;
 }
 
-void modificar_libros_menos_favoritos(const Libro &libro, Libro libros_menor_puntaje[], int indice) {
-    if (indice == 2) {
-        if (nuevo_libro_es_menor(libros_menor_puntaje[2], libro))
-            libros_menor_puntaje[2] = libro;
-    } else if (indice == 1) {
-        if (nuevo_libro_es_menor(libros_menor_puntaje[1], libro)) {
-            libros_menor_puntaje[2] = libros_menor_puntaje[1];
-            libros_menor_puntaje[1] = libro;
-        } else if (libro.nombre < libros_menor_puntaje[1].nombre)
-            libros_menor_puntaje[2] = libro;
-    } else {
-        libros_menor_puntaje[2] = libros_menor_puntaje[1];
-        if (nuevo_libro_es_menor(libros_menor_puntaje[0], libro)) {
-            libros_menor_puntaje[1] = libros_menor_puntaje[0];
-            libros_menor_puntaje[0] = libro;
-        } else if (libro.nombre > libros_menor_puntaje[0].nombre)
-            libros_menor_puntaje[1] = libro;
+void modificar_libros_menor_puntaje(Libro *libros_menor_puntaje, int tope, int indice) {
+    for (int i = tope - 1; i > indice; i--) {
+        libros_menor_puntaje[i] = libros_menor_puntaje[i - 1];
     }
 }
 
-void obtener_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro libros_menor_puntaje[]) {
-    libros_menor_puntaje[0] = libros[0];
-    libros_menor_puntaje[1] = libros[1];
-    libros_menor_puntaje[2] = libros[2];
-    for (int i = 0; i < cantidad_libros; i++) {
-        if (libros[i].puntaje <= libros_menor_puntaje[0].puntaje)
-            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 0);
-        else if (libros[i].puntaje <= libros_menor_puntaje[1].puntaje)
-            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 1);
-        else if (libros[i].puntaje <= libros_menor_puntaje[2].puntaje)
-            modificar_libros_menos_favoritos(libros[i], libros_menor_puntaje, 2);
+void insertar_libro_menos_favorito(Libro libros_menor_puntaje[], int tope, Libro &libro, int indice) {
+    if (nuevo_libro_es_menor(libros_menor_puntaje[indice], libro)) {
+        modificar_libros_menor_puntaje(libros_menor_puntaje, tope, indice);
+        libros_menor_puntaje[indice] = libro;
+    } else if (libros_menor_puntaje[indice].nombre != libro.nombre) {
+        modificar_libros_menor_puntaje(libros_menor_puntaje, tope, indice);
+        libros_menor_puntaje[indice + 1] = libro;
     }
 }
 
-void mostrar_tres_libros_menor_puntaje(Libro libros_menor_puntaje[], int tope) {
-    std::cout << "Los tres libros con menor puntaje son:" << std::endl;
-    for (int i = 0; i < tope; i++){
+void intercambiar_libros(Libro &libro_a, Libro &libro_b) {
+    Libro libro_aux = libro_a;
+    libro_a = libro_b;
+    libro_b = libro_aux;
+}
+
+void ordenar_libros_menor_puntaje(Libro libros_menor_puntaje[], int tope) {
+    for (int i = 0; i < tope; i++) {
+        for (int j = 0; j < tope - 1; j++) {
+            if (nuevo_libro_es_menor(libros_menor_puntaje[j], libros_menor_puntaje[j + 1])) {
+                intercambiar_libros(libros_menor_puntaje[j], libros_menor_puntaje[j + 1]);
+            }
+        }
+    }
+}
+
+void obtener_n_libros_menor_puntaje(Libro *libros, int cantidad_libros, Libro libros_menor_puntaje[],
+                                    int tope_libros_menor_puntaje) {
+    for (int i = 0; i < tope_libros_menor_puntaje; i++) {
+        libros_menor_puntaje[i] = libros[i];
+    }
+    ordenar_libros_menor_puntaje(libros_menor_puntaje, tope_libros_menor_puntaje);
+    for (int i = tope_libros_menor_puntaje; i < cantidad_libros; i++) {
+        for (int j = 0; j < tope_libros_menor_puntaje; j++) {
+            if (libros[i].puntaje <= libros_menor_puntaje[j].puntaje) {
+                insertar_libro_menos_favorito(libros_menor_puntaje, tope_libros_menor_puntaje, libros[i], j);
+                j = tope_libros_menor_puntaje;
+            }
+        }
+    }
+}
+
+void mostrar_n_libros_menor_puntaje(Libro libros_menor_puntaje[], int tope) {
+    std::cout << "Los " << tope << " libros con menor puntaje son:" << std::endl;
+    for (int i = 0; i < tope; i++) {
         std::cout << libros_menor_puntaje[i].nombre << std::endl;
     }
 }
-void obtener_y_mostrar_tres_libros_menor_puntaje(Libro *libros, int cantidad_libros){
-    Libro libros_menor_puntaje[3];
-    obtener_tres_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje);
-    mostrar_tres_libros_menor_puntaje(libros_menor_puntaje, 3);
+
+void obtener_y_mostrar_n_libros_menor_puntaje(Libro *libros, int cantidad_libros, int n) {
+    Libro libros_menor_puntaje[n];
+    obtener_n_libros_menor_puntaje(libros, cantidad_libros, libros_menor_puntaje, n);
+    mostrar_n_libros_menor_puntaje(libros_menor_puntaje, n);
 }
 
 int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &titulo_buscado) {
@@ -260,28 +266,17 @@ int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &
     return indice;
 }
 
-bool es_genero_valido(char letra) {
-    int i = 0;
-    bool es_genero_valido = false;
-    while(i < MAX_GENEROS && !es_genero_valido){
-        if(letra == GENEROS_INICIALES[i])
-            es_genero_valido = true;
-        i++;
-    }
-    return es_genero_valido;
-}
-
 void pedir_libro(Libro &libro) {
     std::cout << "Ingrese el nombre del libro que quiere agregar a la lista" << std::endl;
     std::cin.ignore();
     getline(std::cin, libro.nombre);
     do {
         std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
-        for(int i = 0; i < MAX_GENEROS; i++){
+        for (int i = 0; i < MAX_GENEROS; i++) {
             std::cout << GENEROS_INICIALES[i] << " -> " << GENEROS[i] << std::endl;
         }
         std::cin >> libro.genero;
-    } while (!es_genero_valido(libro.genero));
+    } while (indice_genero_buscado(libro.genero) != NO_ENCONTRADO);
     do {
         std::cout << "Ingrese el puntaje del libro entre " << MIN_PUNTAJE << " y " << MAX_PUNTAJE << std::endl;
         std::cin >> libro.puntaje;
@@ -316,9 +311,9 @@ void pedir_nuevo_puntaje(Libro *libros, int cantidad_libros, int &puntaje_nuevo,
     indice = indice_libro_buscado(libros, cantidad_libros, titulo);
     if (indice != -1) {
         do {
-            std::cout << "Ingrese el nuevo puntaje, entre 0 y 100" << std::endl;
+            std::cout << "Ingrese el nuevo puntaje, entre " << MIN_PUNTAJE << "y " << MAX_PUNTAJE << std::endl;
             std::cin >> puntaje_nuevo;
-        } while (puntaje_nuevo < 0 || puntaje_nuevo > 100);
+        } while (puntaje_nuevo < MIN_PUNTAJE || puntaje_nuevo > MAX_PUNTAJE);
     } else
         std::cout << titulo << " no se encuentra en la lista de libros." << std::endl;
 }
@@ -344,8 +339,10 @@ void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro
         }
         escribir_libros(f_libros_escritura, libros, cantidad_libros);
         std::cout << "Se han guardado los cambios correctamente. Cerrando el menu.";
-    } else
+        f_libros_escritura.close();
+    } else {
         std::cout << "No hubieron cambios realizados. Cerrando el menu.";
+    }
     estado_menu = 0;
 }
 
@@ -400,7 +397,7 @@ realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_
             volver_al_menu();
             break;
         case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
-            obtener_y_mostrar_tres_libros_menor_puntaje(libros, cantidad_libros);
+            obtener_y_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, 7);
             volver_al_menu();
             break;
         case PEDIR_Y_AGREGAR_LIBRO:

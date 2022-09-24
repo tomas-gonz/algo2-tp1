@@ -1,31 +1,26 @@
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <unordered_map>
+#include <iostream>
 #include "libros.h"
 #include "menu.h"
-
+const int ESTADO_MENU_ACTIVO = 1;
 
 int main(int argc, char **argv) {
-    std::ifstream f_libros(argv[1]);
-    if (!f_libros.is_open()) {
-        perror("Main intenta abrir libros.csv");
-        return 1;
+    if(argc != 2){
+        std::cout << "No se ejecuto el programa con los parametros necesarios, deteniendo el programa." << std::endl;
+        return -1;
     }
     int tamanio = 5;
-    auto *libros = new Libro[tamanio];
     int cantidad_libros = 0;
-    leer_libros(f_libros, libros, cantidad_libros, tamanio);
-    f_libros.close();
-    int estado_menu = 1;
+    auto *libros = new Libro[tamanio];
+    abrir_y_leer_archivo(argv[1], libros, cantidad_libros, tamanio);
+    int estado_menu = ESTADO_MENU_ACTIVO;
     char accion = ' ';
     bool hubo_cambios = false;
-
     do {
         imprimir_menu();
         pedir_accion(accion);
         realizar_accion(accion, libros, cantidad_libros, tamanio, argv[1], estado_menu, hubo_cambios);
-    } while (estado_menu == 1);
+    } while (estado_menu == ESTADO_MENU_ACTIVO);
     delete[]libros;
     return 0;
 }

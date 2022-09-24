@@ -32,6 +32,16 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
     cantidad--;
 }
 
+void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &cantidad, int &tamanio) {
+    std::ifstream f_libros(archivo);
+    if (!f_libros.is_open()) {
+        perror("Se intenta abrir libros.csv");
+        return;
+    }
+    leer_libros(f_libros, libros, cantidad, tamanio);
+    f_libros.close();
+}
+
 void escribir_libros(std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros) {
 
     for (int i = 0; i < cantidad_libros; i++) {
