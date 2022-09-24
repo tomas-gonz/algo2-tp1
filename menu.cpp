@@ -26,12 +26,12 @@ const int MIN_ACCIONES = 1;
 const int MAX_ACCIONES = 8;
 const char LISTAR_LIBROS = '1';
 const char MOSTRAR_LIBRO_FAVORITO = '2';
-const int MOSTRAR_GENERO_MAS_LEIDO = '3';
-const int MOSTRAR_GENERO_FAVORITO = '4';
-const int MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = '5';
-const int PEDIR_Y_AGREGAR_LIBRO = '6';
-const int PEDIR_Y_EDITAR_PUNTAJE = '7';
-const int GUARDAR_Y_SALIR = '8';
+const char MOSTRAR_GENERO_MAS_LEIDO = '3';
+const char MOSTRAR_GENERO_FAVORITO = '4';
+const char MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = '5';
+const char AGREGAR_LIBRO = '6';
+const char EDITAR_PUNTAJE = '7';
+const char GUARDAR_Y_SALIR = '8';
 const int CANTIDAD_LIBROS_MENOR_PUNTAJE = 3;
 
 struct Genero {
@@ -58,6 +58,14 @@ std::string genero_palabra(char genero_letra) {
     return "Error, inicial no reconocida como genero posible";
 }
 
+bool se_debe_repetir_accion() {
+    std::string siguiente_accion;
+    std::cout << "Desea repetir accion? presione:" << std::endl << "Y -> Repetir accion" << std::endl
+              << "'Cualquier otro character' -> Volver al menu" << std::endl;
+    std::cin >> siguiente_accion;
+    return siguiente_accion == "Y" || siguiente_accion == "y";
+}
+
 void listar_libros(Libro *libros, int cantidad_libros) {
     std::cout << "Listando los libros:" << std::endl;
     for (int i = 0; i < cantidad_libros; i++) {
@@ -65,6 +73,12 @@ void listar_libros(Libro *libros, int cantidad_libros) {
         std::cout << i + 1 << ") " << libros[i].nombre << " ," << libros[i].puntaje << " puntos";
         std::cout << ", de genero " << genero_str << std::endl;
     }
+}
+
+void accion_listar_libros(Libro *libros, int cantidad_libros){
+    do{
+        listar_libros(libros, cantidad_libros);
+    }while(se_debe_repetir_accion());
 }
 
 void
@@ -101,6 +115,12 @@ void obtener_y_mostrar_libros_favoritos(Libro *libros, int cantidad_libros) {
     int puntaje_mayor = 0;
     obtener_libros_favoritos(libros, cantidad_libros, libros_favoritos, tope, puntaje_mayor);
     mostrar_libros_favoritos(libros_favoritos, tope, puntaje_mayor);
+}
+
+void accion_mostrar_libros_favoritos(Libro *libros, int cantidad_libros){
+    do{
+        obtener_y_mostrar_libros_favoritos(libros, cantidad_libros);
+    }while(se_debe_repetir_accion());
 }
 
 void aumentar_cantidad_y_puntaje_en_generos(Genero generos[], char genero_buscado, int puntaje_obtenido) {
@@ -160,6 +180,12 @@ void obtener_y_mostrar_generos_mas_leidos(Libro *libros, int cantidad_libros) {
     mostrar_generos_mas_leidos(generos_mas_leidos, tope);
 }
 
+void accion_mostrar_generos_mas_leidos(Libro *libros, int cantidad_libros){
+    do{
+        obtener_y_mostrar_generos_mas_leidos(libros, cantidad_libros);
+    }while(se_debe_repetir_accion());
+}
+
 void obtener_generos_favoritos(std::string generos_favoritos[], Genero generos[], int &tope) {
     tope = 1;
     int mayor_promedio = generos[0].puntaje_total / generos[0].cantidad_libros;
@@ -191,7 +217,11 @@ void obtener_y_mostrar_generos_favoritos(Libro *libros, int cantidad_libros) {
     obtener_generos_favoritos(generos_favoritos, generos, tope);
     mostrar_generos_favoritos(generos_favoritos, tope);
 }
-
+void accion_mostrar_generos_favoritos(Libro *libros, int cantidad_libros){
+    do{
+        obtener_y_mostrar_generos_favoritos(libros, cantidad_libros);
+    }while(se_debe_repetir_accion());
+}
 bool nuevo_libro_es_menor(const Libro &libro_viejo, const Libro &libro_nuevo) {
     return libro_nuevo.puntaje < libro_viejo.puntaje ||
            libro_nuevo.nombre < libro_viejo.nombre && libro_nuevo.puntaje == libro_viejo.puntaje;
@@ -258,6 +288,12 @@ void obtener_y_mostrar_n_libros_menor_puntaje(Libro *libros, int cantidad_libros
     mostrar_n_libros_menor_puntaje(libros_menor_puntaje, n);
 }
 
+void accion_mostrar_n_libros_menor_puntaje(Libro *libros, int cantidad_libros, int n){
+    do{
+        obtener_y_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, n);
+    }while(se_debe_repetir_accion());
+}
+
 int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &titulo_buscado) {
     int indice = NO_ENCONTRADO;
     int i = 0;
@@ -269,21 +305,44 @@ int indice_libro_buscado(Libro *libros, int cantidad_libros, const std::string &
     return indice;
 }
 
-void pedir_libro(Libro &libro) {
+void pedir_titulo_libro(std::string &titulo) {
     std::cout << "Ingrese el nombre del libro que quiere agregar a la lista" << std::endl;
     std::cin.ignore();
-    getline(std::cin, libro.nombre);
-    do {
-        std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
-        for (int i = 0; i < MAX_GENEROS; i++) {
-            std::cout << GENEROS_INICIALES[i] << " -> " << GENEROS[i] << std::endl;
-        }
-        std::cin >> libro.genero;
-    } while (indice_genero_buscado(libro.genero) != NO_ENCONTRADO);
-    do {
-        std::cout << "Ingrese el puntaje del libro entre " << MIN_PUNTAJE << " y " << MAX_PUNTAJE << std::endl;
-        std::cin >> libro.puntaje;
-    } while (libro.puntaje > MAX_PUNTAJE || libro.puntaje < MIN_PUNTAJE);
+    getline(std::cin, titulo);
+}
+
+void mostrar_generos() {
+    for (int i = 0; i < MAX_GENEROS; i++) {
+        std::cout << GENEROS_INICIALES[i] << " -> " << GENEROS[i] << std::endl;
+    }
+}
+
+void pedir_genero_libro(char &genero) {
+    std::cout << "Ingrese la inicial del genero del libro, debe ser una de las siguientes inciales:" << std::endl;
+    mostrar_generos();
+    std::cin >> genero;
+    while (indice_genero_buscado(genero) == NO_ENCONTRADO) {
+        std::cout << genero << " no se encuentra dentro de las opciones posibles." << std::endl
+                  << "Ingrese nuevamente la inicial del genero, debe ser una de las siguientes iniciales:" << std::endl;
+        mostrar_generos();
+        std::cin >> genero;
+    }
+}
+
+void pedir_puntaje_libro(int &puntaje) {
+    std::cout << "Ingrese el puntaje del libro entre " << MIN_PUNTAJE << " y " << MAX_PUNTAJE << std::endl;
+    std::cin >> puntaje;
+    while (puntaje > MAX_PUNTAJE || puntaje < MIN_PUNTAJE) {
+        std::cout << puntaje << " no se encuentra dentro del rango valido. " << std::endl
+                  << "Ingrese nuevamente el puntaje entre" << MIN_PUNTAJE << " y " << MAX_PUNTAJE << std::endl;
+        std::cin >> puntaje;
+    }
+}
+
+void pedir_libro(Libro &libro) {
+    pedir_titulo_libro(libro.nombre);
+    pedir_genero_libro(libro.genero);
+    pedir_puntaje_libro(libro.puntaje);
 }
 
 void agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, const Libro &libro_nuevo) {
@@ -297,12 +356,18 @@ void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_li
     hubo_cambios = false;
     Libro libro_nuevo;
     pedir_libro(libro_nuevo);
-    if (indice_libro_buscado(libros, cantidad_libros, libro_nuevo.nombre) == -1) {
+    if (indice_libro_buscado(libros, cantidad_libros, libro_nuevo.nombre) == NO_ENCONTRADO) {
         agregar_libro(libros, tamanio_libros, cantidad_libros, libro_nuevo);
         hubo_cambios = true;
-        std::cout << "Se agrego el libro correctamente" << std::endl;
+        std::cout << "Se agrego el libro correctamente." << std::endl;
     } else
-        std::cout << "Ya existe este libro en la lista" << std::endl;
+        std::cout << "Ya existe este libro en la lista." << std::endl;
+}
+
+void accion_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_libros, bool &hubo_cambios) {
+    do {
+        pedir_y_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
+    } while (se_debe_repetir_accion());
 }
 
 void pedir_nuevo_puntaje(Libro *libros, int cantidad_libros, int &puntaje_nuevo, int &indice) {
@@ -332,6 +397,11 @@ void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_camb
     }
 }
 
+void accion_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_cambios){
+    do{
+        pedir_y_editar_puntaje(libros, cantidad_libros, hubo_cambios);
+    }while(se_debe_repetir_accion());
+}
 void guardar_y_salir(bool hubo_cambios, const std::string &nombre_archivo, Libro *libros, int cantidad_libros,
                      int &estado_menu) {
     if (hubo_cambios) {
@@ -371,12 +441,6 @@ void pedir_accion(char &accion) {
     } while (accion < MIN_ACCION || accion > MAX_ACCION);
 }
 
-void volver_al_menu() {
-    char aux;
-    std::cout << "Ingrese cualquier character para volver al menu" << std::endl;
-    std::cin >> aux;
-}
-
 void
 realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
@@ -384,39 +448,33 @@ realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_
 
     switch (accion) {
         case LISTAR_LIBROS:
-            listar_libros(libros, cantidad_libros);
-            volver_al_menu();
+            accion_listar_libros(libros, cantidad_libros);
             break;
         case MOSTRAR_LIBRO_FAVORITO:
-            obtener_y_mostrar_libros_favoritos(libros, cantidad_libros);
-            volver_al_menu();
+            accion_mostrar_libros_favoritos(libros, cantidad_libros);
             break;
         case MOSTRAR_GENERO_MAS_LEIDO:
-            obtener_y_mostrar_generos_mas_leidos(libros, cantidad_libros);
-            volver_al_menu();
+            accion_mostrar_generos_mas_leidos(libros, cantidad_libros);
             break;
         case MOSTRAR_GENERO_FAVORITO:
-            obtener_y_mostrar_generos_favoritos(libros, cantidad_libros);
-            volver_al_menu();
+            accion_mostrar_generos_favoritos(libros, cantidad_libros);
             break;
         case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
-            obtener_y_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, CANTIDAD_LIBROS_MENOR_PUNTAJE);
-            volver_al_menu();
+            accion_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, CANTIDAD_LIBROS_MENOR_PUNTAJE);
             break;
-        case PEDIR_Y_AGREGAR_LIBRO:
-            pedir_y_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
-            volver_al_menu();
+        case AGREGAR_LIBRO:
+            accion_agregar_libro(libros, tamanio_libros, cantidad_libros, hubo_cambios);
             break;
-        case PEDIR_Y_EDITAR_PUNTAJE:
-            pedir_y_editar_puntaje(libros, cantidad_libros, hubo_cambios);
-            volver_al_menu();
+        case EDITAR_PUNTAJE:
+            accion_editar_puntaje(libros, cantidad_libros, hubo_cambios);
             break;
         case GUARDAR_Y_SALIR:
             guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
             break;
         default:
             std::cout << "Error, el character ingresado no se encuentra en el rango de numeros entre" << MIN_ACCION
-                      << " y " << MAX_ACCION << std::endl;
-            volver_al_menu();
+                      << " y " << MAX_ACCION << std::endl << "Ingrese un character para volver al menu" << std::endl;
+            std::string aux;
+            std::cin >> aux;
     }
 }
