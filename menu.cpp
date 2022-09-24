@@ -31,7 +31,7 @@ const char MOSTRAR_GENERO_FAVORITO = '4';
 const char MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = '5';
 const char AGREGAR_LIBRO = '6';
 const char EDITAR_PUNTAJE = '7';
-const char GUARDAR_Y_SALIR = '8';
+const char  GUARDAR_Y_SALIR = '8';
 const int CANTIDAD_LIBROS_MENOR_PUNTAJE = 3;
 
 struct Genero {
