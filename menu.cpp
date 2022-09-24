@@ -20,6 +20,9 @@ const int NO_ENCONTRADO = -1;
 const int MAX_PUNTAJE = 100;
 const int MIN_PUNTAJE = 0;
 
+const char MIN_ACCION = '1';
+const char MAX_ACCION = '8';
+const int MIN_ACCIONES = 1;
 const int MAX_ACCIONES = 8;
 const char LISTAR_LIBROS = '1';
 const char MOSTRAR_LIBRO_FAVORITO = '2';
@@ -29,7 +32,7 @@ const int MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE = '5';
 const int PEDIR_Y_AGREGAR_LIBRO = '6';
 const int PEDIR_Y_EDITAR_PUNTAJE = '7';
 const int GUARDAR_Y_SALIR = '8';
-
+const int CANTIDAD_LIBROS_MENOR_PUNTAJE = 3;
 
 struct Genero {
     char genero{};
@@ -304,12 +307,12 @@ void pedir_y_agregar_libro(Libro *&libros, int &tamanio_libros, int &cantidad_li
 
 void pedir_nuevo_puntaje(Libro *libros, int cantidad_libros, int &puntaje_nuevo, int &indice) {
     std::string titulo = " ";
-    indice = -1;
+    indice = NO_ENCONTRADO;
     std::cout << "Ingrese el nombre del libro cuyo puntaje quiere modificar" << std::endl;
     std::cin.ignore();
     getline(std::cin, titulo);
     indice = indice_libro_buscado(libros, cantidad_libros, titulo);
-    if (indice != -1) {
+    if (indice != NO_ENCONTRADO) {
         do {
             std::cout << "Ingrese el nuevo puntaje, entre " << MIN_PUNTAJE << "y " << MAX_PUNTAJE << std::endl;
             std::cin >> puntaje_nuevo;
@@ -323,7 +326,7 @@ void pedir_y_editar_puntaje(Libro *&libros, int cantidad_libros, bool &hubo_camb
     int indice_libro = 0;
     int puntaje_nuevo = 0;
     pedir_nuevo_puntaje(libros, cantidad_libros, puntaje_nuevo, indice_libro);
-    if (indice_libro != -1) {
+    if (indice_libro != NO_ENCONTRADO) {
         libros[indice_libro].puntaje = puntaje_nuevo;
         hubo_cambios = true;
     }
@@ -360,12 +363,12 @@ void imprimir_menu() {
 }
 
 void pedir_accion(char &accion) {
-
     accion = 0;
     do {
-        std::cout << "Ingrese un numero, del 1 al " << MAX_ACCIONES << " para utilizar el menu." << std::endl;
+        std::cout << "Ingrese un numero, del " << MIN_ACCIONES << " al " << MAX_ACCIONES << " para utilizar el menu."
+                  << std::endl;
         std::cin >> accion;
-    } while (accion < '1' || accion > '8');
+    } while (accion < MIN_ACCION || accion > MAX_ACCION);
 }
 
 void volver_al_menu() {
@@ -397,7 +400,7 @@ realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_
             volver_al_menu();
             break;
         case MOSTRAR_TRES_LIBROS_MENOR_PUNTAJE:
-            obtener_y_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, 7);
+            obtener_y_mostrar_n_libros_menor_puntaje(libros, cantidad_libros, CANTIDAD_LIBROS_MENOR_PUNTAJE);
             volver_al_menu();
             break;
         case PEDIR_Y_AGREGAR_LIBRO:
@@ -412,8 +415,8 @@ realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_
             guardar_y_salir(hubo_cambios, nombre_archivo, libros, cantidad_libros, estado_menu);
             break;
         default:
-            std::cout << "Error, el character ingresado no se encuentra en el rango de numeros entre 1 y 8"
-                      << std::endl;
+            std::cout << "Error, el character ingresado no se encuentra en el rango de numeros entre" << MIN_ACCION
+                      << " y " << MAX_ACCION << std::endl;
             volver_al_menu();
     }
 }
