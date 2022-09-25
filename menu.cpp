@@ -20,7 +20,6 @@ const int NO_ENCONTRADO = -1;
 const int MAX_PUNTAJE = 100;
 const int MIN_PUNTAJE = 0;
 
-
 const int MIN_ACCIONES = 1;
 const int MAX_ACCIONES = 8;
 const int LISTAR_LIBROS = 1;
@@ -40,10 +39,11 @@ struct Genero {
 };
 
 /*Precondiciones:
- *
+ * -
  */
 /*Postcondiciones:
- *
+ * Devuelve la posicion de letra en el vector GENEROS_INICIALES.
+ * Si letra no se encuentra en el vector, devuelve NO_ENCONTRADO.
  */
 int indice_genero_buscado(char letra) {
     int i = 0;
@@ -338,8 +338,8 @@ void accion_mostrar_generos_favoritos(Libro *libros, int cantidad_libros) {
 }
 
 bool nuevo_libro_es_menor(const Libro &libro_viejo, const Libro &libro_nuevo) {
-    return libro_nuevo.puntaje < libro_viejo.puntaje ||
-           libro_nuevo.nombre < libro_viejo.nombre && libro_nuevo.puntaje == libro_viejo.puntaje;
+    return (libro_nuevo.puntaje < libro_viejo.puntaje) ||
+            (libro_nuevo.nombre < libro_viejo.nombre && libro_nuevo.puntaje == libro_viejo.puntaje);
 }
 
 /*Precondiciones:
