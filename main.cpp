@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     auto *libros = new Libro[tamanio];
     abrir_y_leer_archivo(argv[1], libros, cantidad_libros, tamanio);
     int estado_menu = ESTADO_MENU_ACTIVO;
-    char accion = ' ';
+    int accion = 0;
     bool hubo_cambios = false;
     do {
         imprimir_menu();

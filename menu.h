@@ -7,10 +7,10 @@
 
 void imprimir_menu();
 
-void pedir_accion(char &accion);
+void pedir_accion(int &accion);
 
 void
-realizar_accion(char accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
+realizar_accion(int& accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
                 int &estado_menu, bool &hubo_cambios);
 

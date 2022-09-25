@@ -2,7 +2,12 @@
 #include <fstream>
 #include <string>
 #include "libros.h"
-
+/*Precondiciones:
+ *
+ */
+/*Postcondiciones:
+ *
+ */
 void aumentar_tamanio_libros(int &tamanio, Libro *&libros) {
     auto *libros_aux = new Libro[tamanio * 2];
     for (int i = 0; i < tamanio; i++) {
@@ -12,7 +17,12 @@ void aumentar_tamanio_libros(int &tamanio, Libro *&libros) {
     tamanio = tamanio * 2;
     libros = libros_aux;
 }
-
+/*Precondiciones:
+ *
+ */
+/*Postcondiciones:
+ *
+ */
 void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &tamanio) {
     Libro libro_aux;
     cantidad = 0;
@@ -31,7 +41,12 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
     } while (f_libros.good());
     cantidad--;
 }
-
+/*Precondiciones:
+ *
+ */
+/*Postcondiciones:
+ *
+ */
 void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &cantidad, int &tamanio) {
     std::ifstream f_libros(archivo);
     if (!f_libros.is_open()) {
@@ -41,7 +56,12 @@ void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &canti
     leer_libros(f_libros, libros, cantidad, tamanio);
     f_libros.close();
 }
-
+/*Precondiciones:
+ *
+ */
+/*Postcondiciones:
+ *
+ */
 void escribir_libros(std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros) {
 
     for (int i = 0; i < cantidad_libros; i++) {
