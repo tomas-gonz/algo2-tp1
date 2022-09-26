@@ -3,13 +3,15 @@
 #include "libros.h"
 #include "menu.h"
 const int ESTADO_MENU_ACTIVO = 1;
+const int TAMANIO_INICIAL = 5;
+const int ARGUMENTOS_OBLIGATORIOS = 2;
 
 int main(int argc, char **argv) {
-    if(argc != 2){
+    if(argc != ARGUMENTOS_OBLIGATORIOS){
         std::cout << "No se ejecuto el programa con los parametros necesarios, deteniendo el programa." << std::endl;
         return -1;
     }
-    int tamanio = 5;
+    int tamanio = TAMANIO_INICIAL;
     int cantidad_libros = 0;
     auto *libros = new Libro[tamanio];
     abrir_y_leer_archivo(argv[1], libros, cantidad_libros, tamanio);

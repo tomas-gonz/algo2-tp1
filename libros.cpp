@@ -3,10 +3,10 @@
 #include <string>
 #include "libros.h"
 /*Precondiciones:
- *
+ * tamanio debe estar inicializado
  */
 /*Postcondiciones:
- *
+ * Crea un nuevo vector dinamico de tamanio = 2*tamanio y borra el vector anterior.
  */
 void aumentar_tamanio_libros(int &tamanio, Libro *&libros) {
     auto *libros_aux = new Libro[tamanio * 2];
@@ -18,10 +18,11 @@ void aumentar_tamanio_libros(int &tamanio, Libro *&libros) {
     libros = libros_aux;
 }
 /*Precondiciones:
- *
+ * f_libros no debe respetar el formato de lectura:
+ * TITULO,G,PUNTAJE'/n'.
  */
 /*Postcondiciones:
- *
+ * Lee y copia la informacion del archivo f_libros en *&libros.
  */
 void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &tamanio) {
     Libro libro_aux;
@@ -42,10 +43,10 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
     cantidad--;
 }
 /*Precondiciones:
- *
+ * -
  */
 /*Postcondiciones:
- *
+ * Abre, lee y copia la informacion del archivo f_libros en *&libros.
  */
 void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &cantidad, int &tamanio) {
     std::ifstream f_libros(archivo);
@@ -57,10 +58,12 @@ void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &canti
     f_libros.close();
 }
 /*Precondiciones:
- *
+ * cantidad_libros debe estar inicializado.
  */
 /*Postcondiciones:
- *
+ * Escribe la informacion de *libros en el archivo f_libros_escritura.
+ * El formato del archivo resultante es:
+ * "TITULO",'G',"PUNTAJE"'/n'.
  */
 void escribir_libros(std::ofstream &f_libros_escritura, Libro *libros, int cantidad_libros) {
 
