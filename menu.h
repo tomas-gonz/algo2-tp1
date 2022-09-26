@@ -27,7 +27,7 @@ void pedir_accion(int &accion);
  * El procedimiento se encarga de realizar la accion del menu.
  */
 void
-realizar_accion(int& accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
+realizar_accion(int &accion, Libro *&libros, int &cantidad_libros, int &tamanio_libros,
                 const std::string &nombre_archivo,
                 int &estado_menu, bool &hubo_cambios);
 

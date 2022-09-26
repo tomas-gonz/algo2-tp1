@@ -48,7 +48,7 @@ void leer_libros(std::ifstream &f_libros, Libro *&libros, int &cantidad, int &ta
 /*Postcondiciones:
  * Abre, lee y copia la informacion del archivo f_libros en *&libros.
  */
-void abrir_y_leer_archivo(const std::string& archivo, Libro *&libros, int &cantidad, int &tamanio) {
+void abrir_y_leer_archivo(const std::string &archivo, Libro *&libros, int &cantidad, int &tamanio) {
     std::ifstream f_libros(archivo);
     if (!f_libros.is_open()) {
         perror("Se intenta abrir libros.csv");
