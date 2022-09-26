@@ -12,6 +12,9 @@ const int NO_ENCONTRADO = -1;
 const int MAX_PUNTAJE = 100;
 const int MIN_PUNTAJE = 0;
 
+const std::string REPETIR_ACCION_MAYUSCULA = "Y";
+const std::string REPETIR_ACCION_MINUSCULA = "y";
+
 const int MIN_ACCIONES = 1;
 const int MAX_ACCIONES = 8;
 const int LISTAR_LIBROS = 1;
@@ -74,7 +77,7 @@ bool se_debe_repetir_accion() {
     std::cout << "Desea repetir accion? presione:" << std::endl << "Y -> Repetir accion" << std::endl
               << "'Cualquier otro character' -> Volver al menu" << std::endl;
     std::cin >> siguiente_accion;
-    return siguiente_accion == "Y" || siguiente_accion == "y";
+    return siguiente_accion == REPETIR_ACCION_MAYUSCULA || siguiente_accion == REPETIR_ACCION_MINUSCULA;
 }
 
 /*Precondiciones:
